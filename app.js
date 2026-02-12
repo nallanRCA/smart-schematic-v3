@@ -5,9 +5,7 @@ let panZoomInstance;
 // -------- LOAD BOM --------
 async function loadBOM() {
     const response = await fetch("./data/bom.csv");
-
     const text = await response.text();
-
     const rows = text.split(/\r?\n/).slice(1);
 
     rows.forEach(row => {
