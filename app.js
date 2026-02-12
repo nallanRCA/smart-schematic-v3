@@ -41,13 +41,21 @@ async function loadSchematic() {
     document.getElementById("schematicContainer").appendChild(svg);
 
     panZoomInstance = svgPanZoom(svg, {
-        zoomEnabled: true,
-        controlIconsEnabled: true,
-        fit: true,
-        center: true,
-        minZoom: 0.5,
-        maxZoom: 20
-    });
+    zoomEnabled: true,
+    controlIconsEnabled: true,
+    fit: true,
+    center: true,
+    minZoom: 0.5,
+    maxZoom: 20,
+
+    // ⭐ Mobile support
+    panEnabled: true,
+    dblClickZoomEnabled: true,
+    mouseWheelZoomEnabled: true,
+    preventMouseEventsDefault: false,
+    touchEnabled: true
+});
+
 
     setTimeout(createClickTargets, 800);
 }
