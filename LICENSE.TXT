@@ -1,0 +1,15 @@
+Smart Schematic V3 – Research License
+
+Copyright (c) 2026
+
+This repository is published for viewing and demonstration purposes only.
+
+Permission is NOT granted to:
+• Copy the source code
+• Modify the source code
+• Use the code in commercial or academic projects
+• Redistribute any part of this software
+
+This project may be referenced, cited, or viewed for research and educational discussion only.
+
+All rights reserved.
