@@ -78,8 +78,7 @@ const dnpCircle = document.createElementNS("http://www.w3.org/2000/svg", "circle
 dnpCircle.setAttribute("cx", componentPositions[ref].x);
 dnpCircle.setAttribute("cy", componentPositions[ref].y);
 dnpCircle.setAttribute("r", 18);
-dnpCircle.setAttribute("fill", "rgba(255,0,0,0.4)");
-
+ddnpCircle.setAttribute("fill", "rgba(150,150,150,0)");
 dnpCircle.setAttribute("data-ref", ref);
 dnpCircle.classList.add("dnp-overlay");
 
@@ -102,7 +101,28 @@ viewport.appendChild(dnpCircle);
         viewport.appendChild(circle);
     });
 
-    updateDNPVisibility();
+   function updateDNPVisibility() {
+    const toggle = document.getElementById("dnpToggle");
+    if (!toggle) return;
+
+    const showDNP = toggle.checked;
+    const overlays = document.querySelectorAll(".dnp-overlay");
+
+    overlays.forEach(circle => {
+        const ref = circle.getAttribute("data-ref");
+        const part = BOM[ref];
+        if (!part) return;
+
+        if (part.dnp === true && showDNP === false) {
+            // show grey overlay
+            circle.setAttribute("fill", "rgba(120,120,120,0.35)");
+        } else {
+            // hide overlay
+            circle.setAttribute("fill", "rgba(150,150,150,0)");
+        }
+    });
+}
+
 }
 
 // -------- SHOW COMPONENT --------
@@ -208,3 +228,9 @@ async function startApp() {
 }
 
 startApp();
+async function startApp() {
+    await loadBOM();
+    await loadSchematic();
+    setupSearch();
+    setupDNPToggle();
+}
