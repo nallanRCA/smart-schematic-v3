@@ -78,7 +78,8 @@ const dnpCircle = document.createElementNS("http://www.w3.org/2000/svg", "circle
 dnpCircle.setAttribute("cx", componentPositions[ref].x);
 dnpCircle.setAttribute("cy", componentPositions[ref].y);
 dnpCircle.setAttribute("r", 18);
-dnpCircle.setAttribute("fill", "rgba(150,150,150,0)");
+dnpCircle.setAttribute("fill", "rgba(255,0,0,0.4)");
+
 dnpCircle.setAttribute("data-ref", ref);
 dnpCircle.classList.add("dnp-overlay");
 
