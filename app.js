@@ -18,7 +18,9 @@ async function loadBOM() {
             mpn: cols[2]?.trim(),
             desc: cols[3]?.trim(),
             datasheet: cols[4]?.trim(),
-            image: cols[5]?.trim()
+            image: cols[5]?.trim(),
+dnp: cols[6]?.trim().toUpperCase() === "YES"
+
         };
     });
 }
@@ -82,6 +84,9 @@ function createClickTargets() {
         circle.setAttribute("cy", componentPositions[ref].y);
         circle.setAttribute("r", 6);
         circle.setAttribute("fill", "transparent");
+		circle.setAttribute("data-ref", ref);
+circle.classList.add("dnp-target");
+
         circle.style.cursor = "pointer";
 
         circle.addEventListener("click", (e) => {
@@ -126,7 +131,7 @@ function zoomToComponent(ref) {
 
     showComponent(ref);
 }
-
+function 
 function setupSearch() {
     const box = document.getElementById("searchBox");
     const resultsDiv = document.getElementById("searchResults");
@@ -163,6 +168,22 @@ Object.keys(BOM).forEach(ref => {
 
     });
 }
+function updateDNPVisibility() {
+    const showDNP = document.getElementById("dnpToggle").checked;
+    const circles = document.querySelectorAll(".dnp-target");
+
+    circles.forEach(circle => {
+        const ref = circle.getAttribute("data-ref");
+        const part = BOM[ref];
+        if (!part) return;
+
+        if (part.dnp && !showDNP) {
+            circle.style.opacity = "0.15";   // faded
+        } else {
+            circle.style.opacity = "0";      // invisible normal
+        }
+    });
+}
 
 // -------- START APP --------
 async function startApp() {
@@ -171,4 +192,10 @@ async function startApp() {
     setupSearch();
 }
 
-startApp();
+async function startApp() {
+    await loadBOM();
+    await loadSchematic();
+    setupSearch();
+    setupDNPToggle();
+    updateDNPVisibility();   // apply on startup
+}
