@@ -1,4 +1,6 @@
+let FULL_BOM = {};
 let BOM = {};
+
 let componentPositions = {};
 let panZoomInstance;
 
@@ -163,6 +165,24 @@ function zoomToComponent(ref) {
 
     showComponent(ref);
 }
+function applyDNPFilter() {
+    const toggle = document.getElementById("dnpToggle");
+    if (!toggle) return;
+
+    const showDNP = toggle.checked;
+
+    BOM = {}; // rebuild filtered BOM
+
+    Object.keys(FULL_BOM).forEach(ref => {
+        const part = FULL_BOM[ref];
+
+        if (!part.dnp || showDNP) {
+            BOM[ref] = part;
+        }
+    });
+
+    console.log("Filtered BOM:", BOM);
+}
 
 
 function setupSearch() {
@@ -216,15 +236,27 @@ function updateDNPVisibility() {
 
 function setupDNPToggle() {
     const toggle = document.getElementById("dnpToggle");
-    if (toggle) toggle.addEventListener("change", updateDNPVisibility);
+    if (!toggle) return;
+
+    toggle.addEventListener("change", () => {
+        applyDNPFilter();
+    });
 }
+
 
 // -------- START APP --------
 
 
 window.addEventListener("load", async () => {
-    await loadBOM();
-    await loadSchematic();
+    function setupDNPToggle() {
+    const toggle = document.getElementById("dnpToggle");
+    if (!toggle) return;
+
+    toggle.addEventListener("change", () => {
+        applyDNPFilter();
+    });
+}
+
 
     setupSearch();
     setupDNPToggle();
