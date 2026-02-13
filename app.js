@@ -1,6 +1,4 @@
-let FULL_BOM = {};
 let BOM = {};
-
 let componentPositions = {};
 let panZoomInstance;
 
@@ -20,8 +18,7 @@ async function loadBOM() {
             mpn: cols[2]?.trim(),
             desc: cols[3]?.trim(),
             datasheet: cols[4]?.trim(),
-            image: cols[5]?.trim(),
-            dnp: cols[6]?.trim().toUpperCase() === "YES"
+            image: cols[5]?.trim()
         };
     });
 }
@@ -59,7 +56,7 @@ async function loadSchematic() {
     setTimeout(createClickTargets, 800);
 }
 
-// -------- CREATE CLICK TARGETS --------
+// -------- CLICK TARGETS --------
 function createClickTargets() {
     const viewport = document.querySelector(".svg-pan-zoom_viewport");
     const descs = document.querySelectorAll("desc");
@@ -75,24 +72,12 @@ function createClickTargets() {
             x: bbox.x + bbox.width / 2,
             y: bbox.y + bbox.height / 2
         };
-// ⭐ DNP overlay circle (bigger)
-const dnpCircle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-dnpCircle.setAttribute("cx", componentPositions[ref].x);
-dnpCircle.setAttribute("cy", componentPositions[ref].y);
-dnpCircle.setAttribute("r", 18);
-ddnpCircle.setAttribute("fill", "rgba(150,150,150,0)");
-dnpCircle.setAttribute("data-ref", ref);
-dnpCircle.classList.add("dnp-overlay");
-
-viewport.appendChild(dnpCircle);
 
         const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
         circle.setAttribute("cx", componentPositions[ref].x);
         circle.setAttribute("cy", componentPositions[ref].y);
         circle.setAttribute("r", 6);
         circle.setAttribute("fill", "transparent");
-        circle.setAttribute("data-ref", ref);
-        circle.classList.add("dnp-target");
         circle.style.cursor = "pointer";
 
         circle.addEventListener("click", (e) => {
@@ -102,29 +87,6 @@ viewport.appendChild(dnpCircle);
 
         viewport.appendChild(circle);
     });
-
-   function updateDNPVisibility() {
-    const toggle = document.getElementById("dnpToggle");
-    if (!toggle) return;
-
-    const showDNP = toggle.checked;
-    const overlays = document.querySelectorAll(".dnp-overlay");
-
-    overlays.forEach(circle => {
-        const ref = circle.getAttribute("data-ref");
-        const part = BOM[ref];
-        if (!part) return;
-
-        if (part.dnp === true && showDNP === false) {
-            // show grey overlay
-            circle.setAttribute("fill", "rgba(120,120,120,0.35)");
-        } else {
-            // hide overlay
-            circle.setAttribute("fill", "rgba(150,150,150,0)");
-        }
-    });
-}
-
 }
 
 // -------- SHOW COMPONENT --------
@@ -149,11 +111,6 @@ function showComponent(ref) {
 
 // -------- SEARCH --------
 function zoomToComponent(ref) {
-    const toggle = document.getElementById("dnpToggle");
-    const part = BOM[ref];
-
-    if (part?.dnp && toggle && !toggle.checked) return;
-
     const pos = componentPositions[ref];
     if (!pos || !panZoomInstance) return;
 
@@ -165,25 +122,6 @@ function zoomToComponent(ref) {
 
     showComponent(ref);
 }
-function applyDNPFilter() {
-    const toggle = document.getElementById("dnpToggle");
-    if (!toggle) return;
-
-    const showDNP = toggle.checked;
-
-    BOM = {}; // rebuild filtered BOM
-
-    Object.keys(FULL_BOM).forEach(ref => {
-        const part = FULL_BOM[ref];
-
-        if (!part.dnp || showDNP) {
-            BOM[ref] = part;
-        }
-    });
-
-    console.log("Filtered BOM:", BOM);
-}
-
 
 function setupSearch() {
     const box = document.getElementById("searchBox");
@@ -210,58 +148,9 @@ function setupSearch() {
     });
 }
 
-// -------- DNP FEATURE --------
-function updateDNPVisibility() {
-    const toggle = document.getElementById("dnpToggle");
-    if (!toggle) return;
-
-    const showDNP = toggle.checked;
-    const overlays = document.querySelectorAll(".dnp-overlay");
-
-    overlays.forEach(circle => {
-        const ref = circle.getAttribute("data-ref");
-        const part = BOM[ref];
-        if (!part) return;
-
-        // ⭐ hide DNP components by disabling click + shrinking circle
-        if (part.dnp && !showDNP) {
-            circle.setAttribute("r", 0);     // hide click target
-        } else {
-            circle.setAttribute("r", 18);    // restore click target
-        }
-    });
-}
-
-
-
-function setupDNPToggle() {
-    const toggle = document.getElementById("dnpToggle");
-    if (!toggle) return;
-
-    toggle.addEventListener("change", () => {
-        applyDNPFilter();
-    });
-}
-
-
-// -------- START APP --------
-
-
+// -------- START --------
 window.addEventListener("load", async () => {
-    function setupDNPToggle() {
-    const toggle = document.getElementById("dnpToggle");
-    if (!toggle) return;
-
-    toggle.addEventListener("change", () => {
-        applyDNPFilter();
-    });
-}
-
-
+    await loadBOM();
+    await loadSchematic();
     setupSearch();
-    setupDNPToggle();
-
-    // run DNP once after overlays are created
-    setTimeout(updateDNPVisibility, 1500);
 });
-
