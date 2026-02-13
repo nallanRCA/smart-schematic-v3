@@ -220,17 +220,24 @@ function setupDNPToggle() {
 }
 
 // -------- START APP --------
+
+
 async function startApp() {
     await loadBOM();
     await loadSchematic();
     setupSearch();
-    setupDNPToggle();
+    function setupDNPToggle() {
+    const toggle = document.getElementById("dnpToggle");
+    if (!toggle) return;
+
+    toggle.addEventListener("change", () => {
+        console.log("DNP toggle changed"); // debug log
+        updateDNPVisibility();
+    });
 }
 
-startApp();
-async function startApp() {
-    await loadBOM();
-    await loadSchematic();
-    setupSearch();
-    setupDNPToggle();
+
+    // ⭐ run once after everything is ready
+    setTimeout(updateDNPVisibility, 1200);
 }
+
