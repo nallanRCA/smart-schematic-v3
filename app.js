@@ -222,22 +222,14 @@ function setupDNPToggle() {
 // -------- START APP --------
 
 
-async function startApp() {
+window.addEventListener("load", async () => {
     await loadBOM();
     await loadSchematic();
+
     setupSearch();
-    function setupDNPToggle() {
-    const toggle = document.getElementById("dnpToggle");
-    if (!toggle) return;
+    setupDNPToggle();
 
-    toggle.addEventListener("change", () => {
-        console.log("DNP toggle changed"); // debug log
-        updateDNPVisibility();
-    });
-}
-
-
-    // ⭐ run once after everything is ready
-    setTimeout(updateDNPVisibility, 1200);
-}
+    // run DNP once after overlays are created
+    setTimeout(updateDNPVisibility, 1500);
+});
 
