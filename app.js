@@ -166,16 +166,22 @@ function updateDNPVisibility() {
         const part = BOM[ref];
         if (!part) return;
 
-        const group = desc.closest("g");
+        // climb up until top component group
+        let group = desc.parentElement;
+        while (group && group.parentElement && group.parentElement.tagName !== "svg") {
+            group = group.parentElement;
+        }
+
         if (!group) return;
 
         if (part.dnp && !showDNP) {
-            group.style.opacity = "0.2";  // fade real component
+            group.style.opacity = "0.15";   // fade whole component
         } else {
             group.style.opacity = "1";
         }
     });
 }
+
 
 function setupDNPToggle() {
     const toggle = document.getElementById("dnpToggle");
