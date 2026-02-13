@@ -19,8 +19,7 @@ async function loadBOM() {
             desc: cols[3]?.trim(),
             datasheet: cols[4]?.trim(),
             image: cols[5]?.trim(),
-dnp: cols[6]?.trim().toUpperCase() === "YES"
-
+            dnp: cols[6]?.trim().toUpperCase() === "YES"
         };
     });
 }
@@ -28,7 +27,6 @@ dnp: cols[6]?.trim().toUpperCase() === "YES"
 // -------- LOAD SCHEMATIC --------
 async function loadSchematic() {
     const response = await fetch("./data/schematic.svg");
-
     const svgText = await response.text();
 
     const parser = new DOMParser();
@@ -43,26 +41,23 @@ async function loadSchematic() {
     document.getElementById("schematicContainer").appendChild(svg);
 
     panZoomInstance = svgPanZoom(svg, {
-    zoomEnabled: true,
-    controlIconsEnabled: true,
-    fit: true,
-    center: true,
-    minZoom: 0.5,
-    maxZoom: 20,
-
-    // ⭐ Mobile support
-    panEnabled: true,
-    dblClickZoomEnabled: true,
-    mouseWheelZoomEnabled: true,
-    preventMouseEventsDefault: false,
-    touchEnabled: true
-});
-
+        zoomEnabled: true,
+        controlIconsEnabled: true,
+        fit: true,
+        center: true,
+        minZoom: 0.5,
+        maxZoom: 20,
+        panEnabled: true,
+        dblClickZoomEnabled: true,
+        mouseWheelZoomEnabled: true,
+        preventMouseEventsDefault: false,
+        touchEnabled: true
+    });
 
     setTimeout(createClickTargets, 800);
 }
 
-// -------- CLICK TARGETS --------
+// -------- CREATE CLICK TARGETS --------
 function createClickTargets() {
     const viewport = document.querySelector(".svg-pan-zoom_viewport");
     const descs = document.querySelectorAll("desc");
@@ -84,9 +79,8 @@ function createClickTargets() {
         circle.setAttribute("cy", componentPositions[ref].y);
         circle.setAttribute("r", 6);
         circle.setAttribute("fill", "transparent");
-		circle.setAttribute("data-ref", ref);
-circle.classList.add("dnp-target");
-
+        circle.setAttribute("data-ref", ref);
+        circle.classList.add("dnp-target");
         circle.style.cursor = "pointer";
 
         circle.addEventListener("click", (e) => {
@@ -96,6 +90,8 @@ circle.classList.add("dnp-target");
 
         viewport.appendChild(circle);
     });
+
+    updateDNPVisibility();
 }
 
 // -------- SHOW COMPONENT --------
@@ -131,7 +127,7 @@ function zoomToComponent(ref) {
 
     showComponent(ref);
 }
-function 
+
 function setupSearch() {
     const box = document.getElementById("searchBox");
     const resultsDiv = document.getElementById("searchResults");
@@ -141,35 +137,28 @@ function setupSearch() {
         resultsDiv.innerHTML = "";
         if (!term) return;
 
-        const exactMatches = [];
-const partialMatches = [];
+        Object.keys(BOM).forEach(ref => {
+            const part = BOM[ref];
+            const text = (ref + part.desc + part.value + part.mpn).toUpperCase();
 
-Object.keys(BOM).forEach(ref => {
-    const part = BOM[ref];
-    const text = (ref + part.desc + part.value + part.mpn).toUpperCase();
-
-    if (ref === term) {
-        exactMatches.push(ref);
-    } else if (text.includes(term)) {
-        partialMatches.push(ref);
-    }
-});
-
-// show exact match first
-[...exactMatches, ...partialMatches].forEach(ref => {
-    const part = BOM[ref];
-    const item = document.createElement("div");
-    item.innerText = ref + " — " + part.desc;
-    item.style.cursor = "pointer";
-    item.style.padding = "4px";
-    item.onclick = () => zoomToComponent(ref);
-    resultsDiv.appendChild(item);
-});
-
+            if (text.includes(term)) {
+                const item = document.createElement("div");
+                item.innerText = ref + " — " + part.desc;
+                item.style.cursor = "pointer";
+                item.style.padding = "4px";
+                item.onclick = () => zoomToComponent(ref);
+                resultsDiv.appendChild(item);
+            }
+        });
     });
 }
+
+// -------- DNP FEATURE --------
 function updateDNPVisibility() {
-    const showDNP = document.getElementById("dnpToggle").checked;
+    const toggle = document.getElementById("dnpToggle");
+    if (!toggle) return;
+
+    const showDNP = toggle.checked;
     const circles = document.querySelectorAll(".dnp-target");
 
     circles.forEach(circle => {
@@ -178,11 +167,16 @@ function updateDNPVisibility() {
         if (!part) return;
 
         if (part.dnp && !showDNP) {
-            circle.style.opacity = "0.15";   // faded
+            circle.style.opacity = "0.15";
         } else {
-            circle.style.opacity = "0";      // invisible normal
+            circle.style.opacity = "0";
         }
     });
+}
+
+function setupDNPToggle() {
+    const toggle = document.getElementById("dnpToggle");
+    if (toggle) toggle.addEventListener("change", updateDNPVisibility);
 }
 
 // -------- START APP --------
@@ -190,12 +184,7 @@ async function startApp() {
     await loadBOM();
     await loadSchematic();
     setupSearch();
+    setupDNPToggle();
 }
 
-async function startApp() {
-    await loadBOM();
-    await loadSchematic();
-    setupSearch();
-    setupDNPToggle();
-    updateDNPVisibility();   // apply on startup
-}
+startApp();
