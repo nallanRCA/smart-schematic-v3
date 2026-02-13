@@ -147,6 +147,11 @@ function showComponent(ref) {
 
 // -------- SEARCH --------
 function zoomToComponent(ref) {
+    const toggle = document.getElementById("dnpToggle");
+    const part = BOM[ref];
+
+    if (part?.dnp && toggle && !toggle.checked) return;
+
     const pos = componentPositions[ref];
     if (!pos || !panZoomInstance) return;
 
@@ -158,6 +163,7 @@ function zoomToComponent(ref) {
 
     showComponent(ref);
 }
+
 
 function setupSearch() {
     const box = document.getElementById("searchBox");
@@ -190,28 +196,22 @@ function updateDNPVisibility() {
     if (!toggle) return;
 
     const showDNP = toggle.checked;
-    const descs = document.querySelectorAll("desc");
+    const overlays = document.querySelectorAll(".dnp-overlay");
 
-    descs.forEach(desc => {
-        const ref = desc.textContent.trim().toUpperCase();
+    overlays.forEach(circle => {
+        const ref = circle.getAttribute("data-ref");
         const part = BOM[ref];
         if (!part) return;
 
-        // climb up until top component group
-        let group = desc.parentElement;
-        while (group && group.parentElement && group.parentElement.tagName !== "svg") {
-            group = group.parentElement;
-        }
-
-        if (!group) return;
-
+        // ⭐ hide DNP components by disabling click + shrinking circle
         if (part.dnp && !showDNP) {
-            group.style.opacity = "0.15";   // fade whole component
+            circle.setAttribute("r", 0);     // hide click target
         } else {
-            group.style.opacity = "1";
+            circle.setAttribute("r", 18);    // restore click target
         }
     });
 }
+
 
 
 function setupDNPToggle() {
