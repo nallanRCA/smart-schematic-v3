@@ -159,17 +159,20 @@ function updateDNPVisibility() {
     if (!toggle) return;
 
     const showDNP = toggle.checked;
-    const circles = document.querySelectorAll(".dnp-target");
+    const descs = document.querySelectorAll("desc");
 
-    circles.forEach(circle => {
-        const ref = circle.getAttribute("data-ref");
+    descs.forEach(desc => {
+        const ref = desc.textContent.trim().toUpperCase();
         const part = BOM[ref];
         if (!part) return;
 
+        const group = desc.closest("g");
+        if (!group) return;
+
         if (part.dnp && !showDNP) {
-            circle.style.opacity = "0.15";
+            group.style.opacity = "0.2";  // fade real component
         } else {
-            circle.style.opacity = "0";
+            group.style.opacity = "1";
         }
     });
 }
