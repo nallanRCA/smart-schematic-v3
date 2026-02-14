@@ -31,10 +31,39 @@ body {
     background:white;
 }
 
-#schematicContainer {
-    width:100%;
-    height:100%;
+/* Desktop default view */
+#viewer {
+    width: 100%;
+    height: 100vh;
+    overflow: auto;
+    background: #111;
 }
+/* Mobile / tablet */
+@media (max-width: 900px) {
+
+    #schematicImage {
+        width: 100%;
+        height: auto;
+    }
+
+    #schematicContainer {
+        padding: 5px;
+    }
+}
+
+#schematicContainer {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+}
+
+#schematicImage {
+    max-width: none;   /* IMPORTANT: don't shrink image */
+    width: auto;
+    height: auto;
+}
+
 
 input {
     width:100%;
