@@ -1,0 +1,20 @@
+{
+  "R1": {
+    "value": "10k",
+    "type": "Resistor",
+    "datasheet": "https://example.com/resistor.pdf",
+    "dnp": false
+  },
+  "C1": {
+    "value": "100nF",
+    "type": "Capacitor",
+    "datasheet": "https://example.com/capacitor.pdf",
+    "dnp": false
+  },
+  "U1": {
+    "value": "Microcontroller",
+    "type": "IC",
+    "datasheet": "https://example.com/ic.pdf",
+    "dnp": false
+  }
+}
