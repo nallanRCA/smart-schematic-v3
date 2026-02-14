@@ -29,7 +29,8 @@ async function loadBOM() {
 let panZoomInstance;
 
 function loadSchematic() {
-    fetch("schematic.svg")
+    fetch("data/schematic.svg")
+
         .then(res => res.text())
         .then(svgText => {
 
