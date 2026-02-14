@@ -16,11 +16,18 @@ window.addEventListener("load", () => {
         svg.setAttribute("id", "schematicSVG");
 
         panZoomInstance = svgPanZoom(svg, {
-            zoomEnabled: true,
-            controlIconsEnabled: true,
-            fit: true,
-            center: true
-        });
+    zoomEnabled: true,
+    controlIconsEnabled: true,
+    fit: true,
+    center: true,
+
+    // ⭐ REQUIRED when SVG is inside <object>
+    mouseWheelZoomEnabled: true,
+    dblClickZoomEnabled: true,
+    panEnabled: true,
+    preventMouseEventsDefault: true
+});
+
 
         setTimeout(() => {
             panZoomInstance.zoomBy(2.2);
@@ -99,8 +106,8 @@ function zoomToComponent(ref) {
     const pos = componentPositions[ref];
     if (!pos || !panZoomInstance) return;
 
-    //panZoomInstance.zoom(6);
-    //panZoomInstance.pan({
+    panZoomInstance.zoom(6);
+    panZoomInstance.pan({
         x: -pos.x * 6 + 400,
         y: -pos.y * 6 + 300
     });
