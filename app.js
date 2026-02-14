@@ -42,6 +42,27 @@ function loadSchematic() {
 
             // Give SVG an id so library can control it
             svg.setAttribute("id", "schematicSVG");
+// --- Force browser to render SVG first ---
+requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+
+        // ⭐ Initialize viewer ONLY after render
+        panZoomInstance = svgPanZoom("#schematicSVG", {
+            zoomEnabled: true,
+            controlIconsEnabled: true,
+            fit: true,
+            center: true
+        });
+
+        // ⭐ Startup zoom (desktop friendly)
+        setTimeout(() => {
+            panZoomInstance.zoomBy(2.5);
+        }, 300);
+
+        console.log("Viewer initialized");
+    });
+});
+
 			// ⭐ FIX KICAD SVG (adds missing viewBox)
 if (!svg.getAttribute("viewBox")) {
     const width = svg.getAttribute("width");
