@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Smart Schematic V3</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<div id="container">
+
+    <!-- LEFT PANEL -->
+    <div id="leftPanel">
+        <h2>Search</h2>
+        <input id="searchBox" placeholder="Search component...">
+        <div id="searchResults"></div>
+    </div>
+
+    <!-- MIDDLE PANEL -->
+   <div id="schematicContainer">
+    <object id="schematicObj" data="data/schematic.svg" type="image/svg+xml"></object>
+</div>
+
+
+    <!-- RIGHT PANEL -->
+    <div id="componentDetails">
+        <h2>Component Info</h2>
+        <p>Click a component</p>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
