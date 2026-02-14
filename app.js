@@ -26,20 +26,48 @@ async function loadBOM() {
 }
 
 // -------- LOAD SCHEMATIC --------
-async function loadSchematic() {
-    const response = await fetch("./data/schematic.svg");
-    const svgText = await response.text();
+let panZoomInstance;
 
-    const parser = new DOMParser();
-    const svgDoc = parser.parseFromString(svgText, "image/svg+xml");
-    const svg = svgDoc.querySelector("svg");
+function loadSchematic() {
+    fetch("schematic.svg")
+        .then(res => res.text())
+        .then(svgText => {
 
-    svg.removeAttribute("width");
-    svg.removeAttribute("height");
-    svg.style.width = "100%";
-    svg.style.height = "100%";
+            const container = document.getElementById("schematicContainer");
+            container.innerHTML = svgText;
 
-    document.getElementById("schematicContainer").appendChild(svg);
+            const svg = container.querySelector("svg");
+
+            // Give SVG an id so library can control it
+            svg.setAttribute("id", "schematicSVG");
+
+            // --- Initialize viewer ---
+            panZoomInstance = svgPanZoom("#schematicSVG", {
+                zoomEnabled: true,
+                controlIconsEnabled: true,
+                minZoom: 0.5,
+                maxZoom: 20,
+                panEnabled: true,
+                dblClickZoomEnabled: true,
+                mouseWheelZoomEnabled: true,
+                preventMouseEventsDefault: false,
+                touchEnabled: true,
+                fit: true,
+                center: true
+            });
+
+            // 🔥 DESKTOP STARTUP ZOOM (guaranteed working)
+            setTimeout(() => {
+                panZoomInstance.zoomBy(2.5); // BIG readable start
+            }, 500);
+
+            // your existing feature
+            setTimeout(createClickTargets, 800);
+        });
+}
+
+// Run when page loads
+window.addEventListener("load", loadSchematic);
 
     panZoomInstance = svgPanZoom(svg, {
         zoomEnabled: true,
