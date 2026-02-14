@@ -57,6 +57,29 @@ async function loadSchematic() {
 
     setTimeout(createClickTargets, 800);
 }
+panZoomInstance = svgPanZoom(svg, {
+    zoomEnabled: true,
+    controlIconsEnabled: true,
+    fit: true,
+    center: true,
+    minZoom: 0.5,
+    maxZoom: 20,
+    panEnabled: true,
+    dblClickZoomEnabled: true,
+    mouseWheelZoomEnabled: true,
+    preventMouseEventsDefault: false,
+    touchEnabled: true
+});
+
+setTimeout(createClickTargets, 800);
+// ⭐ DEFAULT DESKTOP ZOOM (VERY IMPORTANT)
+setTimeout(() => {
+    panZoomInstance.zoom(1.6);   // try 1.6 or 1.8 if you want bigger
+    panZoomInstance.center();
+}, 300);
+
+}
+
 
 // -------- CLICK TARGETS --------
 function createClickTargets() {
