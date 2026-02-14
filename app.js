@@ -102,7 +102,8 @@ setTimeout(() => {
 }, 300);
 
 }
-panZoomInstance = svgPanZoom(svg, {
+panZoomInstance = svgPanZoom("#schematicSVG", {
+
     zoomEnabled: true,
     controlIconsEnabled: true,
     fit: false,
