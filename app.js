@@ -2,55 +2,56 @@ let panZoomInstance = null;
 
 window.addEventListener("load", () => {
 
-    const obj = document.getElementById("schematicObj");
+    // 🔥 Load SVG as text (works on GitHub Pages)
+    fetch("data/schematic.svg")
+        .then(res => res.text())
+        .then(svgText => {
 
-    obj.addEventListener("load", () => {
+            const parser = new DOMParser();
+            const svgDoc = parser.parseFromString(svgText, "image/svg+xml");
+            const svg = svgDoc.querySelector("svg");
 
-        const svgDoc = obj.contentDocument;
+            if (!svg) {
+                console.error("SVG not found");
+                return;
+            }
 
-        // 🔥 KiCad exports nested SVGs — grab the REAL one
-        let svg = svgDoc.querySelector("svg svg") || svgDoc.querySelector("svg");
+            // Inject SVG directly into page
+            document.getElementById("schematicViewer").appendChild(svg);
 
-        if (!svg) {
-            console.error("SVG not found");
-            return;
-        }
+            svg.setAttribute("id", "schematicSVG");
+            svg.style.width = "100%";
+            svg.style.height = "100%";
 
-        console.log("Real SVG detected");
+            // Give SVG a viewBox if missing
+            if (!svg.getAttribute("viewBox")) {
+                const bbox = svg.getBBox();
+                svg.setAttribute("viewBox", `0 0 ${bbox.width} ${bbox.height}`);
+            }
 
-        // ⭐ Ensure SVG has viewBox (REQUIRED for svg-pan-zoom)
-        if (!svg.getAttribute("viewBox")) {
-            const bbox = svg.getBBox();
-            svg.setAttribute("viewBox", `0 0 ${bbox.width} ${bbox.height}`);
-        }
+            // Start zoom engine
+            setTimeout(() => {
 
-        // Give id for library
-        svg.setAttribute("id", "schematicSVG");
+                panZoomInstance = svgPanZoom("#schematicSVG", {
+                    zoomEnabled: true,
+                    controlIconsEnabled: true,
+                    fit: true,
+                    center: true,
+                    panEnabled: true,
+                    mouseWheelZoomEnabled: true,
+                    dblClickZoomEnabled: true,
+                    minZoom: 0.2,
+                    maxZoom: 50
+                });
 
-        // ⭐ Wait for layout inside flex container
-        setTimeout(() => {
+                panZoomInstance.resize();
+                panZoomInstance.fit();
+                panZoomInstance.center();
 
-            panZoomInstance = svgPanZoom("#schematicSVG", {
-                zoomEnabled: true,
-                controlIconsEnabled: true,
-                fit: true,
-                center: true,
-                panEnabled: true,
-                mouseWheelZoomEnabled: true,
-                dblClickZoomEnabled: true,
-                preventMouseEventsDefault: false,
-                minZoom: 0.2,
-                maxZoom: 50
-            });
+                console.log("Zoom READY");
 
-            panZoomInstance.resize();
-            panZoomInstance.fit();
-            panZoomInstance.center();
+            }, 200);
 
-            console.log("ZOOM ENGINE READY");
-
-        }, 400);
-
-    });
+        });
 
 });
