@@ -2,137 +2,49 @@ let BOM = {};
 let componentPositions = {};
 let panZoomInstance;
 let zoomLevel = 1.5; // default zoom (1 = 100%)
-
-
-// -------- LOAD BOM --------
-async function loadBOM() {
-    const response = await fetch("./data/bom.csv");
-    const text = await response.text();
-    const rows = text.split(/\r?\n/).slice(1);
-
-    rows.forEach(row => {
-        const cols = row.split(",");
-        const ref = cols[0]?.trim().toUpperCase();
-        if (!ref) return;
-
-        BOM[ref] = {
-            value: cols[1]?.trim(),
-            mpn: cols[2]?.trim(),
-            desc: cols[3]?.trim(),
-            datasheet: cols[4]?.trim(),
-            image: cols[5]?.trim()
-        };
-    });
-}
-
-// -------- LOAD SCHEMATIC --------
 let panZoomInstance;
 
-function loadSchematic() {
-    fetch("data/schematic.svg")
+window.addEventListener("load", () => {
 
+    const obj = document.getElementById("schematicObj");
 
-        .then(res => res.text())
-        .then(svgText => {
+    obj.addEventListener("load", () => {
 
-            const container = document.getElementById("schematicContainer");
-            container.innerHTML = svgText;
+        const svgDoc = obj.contentDocument;
+        const svg = svgDoc.querySelector("svg");
 
-            const svg = container.querySelector("svg");
+        svg.setAttribute("id", "schematicSVG");
 
-            // Give SVG an id so library can control it
-            svg.setAttribute("id", "schematicSVG");
-// --- Force browser to render SVG first ---
-requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-
-        // ⭐ Initialize viewer ONLY after render
-        panZoomInstance = svgPanZoom("#schematicSVG", {
+        panZoomInstance = svgPanZoom(svg, {
             zoomEnabled: true,
             controlIconsEnabled: true,
             fit: true,
             center: true
         });
 
-        // ⭐ Startup zoom (desktop friendly)
         setTimeout(() => {
-            panZoomInstance.zoomBy(2.5);
-        }, 300);
+            panZoomInstance.zoomBy(2.2);
+        }, 500);
 
-        console.log("Viewer initialized");
+        console.log("Pan & Zoom Ready");
+
+        // ⭐ NOW that SVG is ready, create click targets
+        createClickTargets();
     });
-});
 
-			// ⭐ FIX KICAD SVG (adds missing viewBox)
-if (!svg.getAttribute("viewBox")) {
-    const width = svg.getAttribute("width");
-    const height = svg.getAttribute("height");
-
-    if (width && height) {
-        svg.setAttribute("viewBox", `0 0 ${parseFloat(width)} ${parseFloat(height)}`);
-        svg.removeAttribute("width");
-        svg.removeAttribute("height");
-        console.log("viewBox added to SVG");
-    }
-}
-
-
-            // --- Initialize viewer ---
-            panZoomInstance = svgPanZoom("#schematicSVG", {
-    zoomEnabled: true,
-    controlIconsEnabled: true,
-    fit: true,
-    center: true
-});
-
-
-            // 🔥 DESKTOP STARTUP ZOOM (guaranteed working)
-            setTimeout(() => {
-                panZoomInstance.zoomBy(2.5); // BIG readable start
-            }, 500);
-
-            // your existing feature
-            setTimeout(createClickTargets, 800);
-        });
-}
-
-// Run when page loads
-window.addEventListener("load", loadSchematic);
-
-panZoomInstance = svgPanZoom("#schematicSVG", {
-
-    zoomEnabled: true,
-    controlIconsEnabled: true,
-    fit: false,
-    center: false,
-    minZoom: 0.5,
-    maxZoom: 20,
-    panEnabled: true,
-    dblClickZoomEnabled: true,
-    mouseWheelZoomEnabled: true,
-    preventMouseEventsDefault: false,
-    touchEnabled: true,
-
-    // ⭐ RUN ONLY WHEN VIEWER IS READY
-    onUpdatedCTM: function () {
-        // run once only
-        if (!panZoomInstance.startupZoomDone) {
-            panZoomInstance.startupZoomDone = true;
-
-            panZoomInstance.resize();
-            panZoomInstance.fit();
-            panZoomInstance.center();
-            panZoomInstance.zoomBy(2.5); // big readable zoom
-        }
-    }
 });
 
 
 
 // -------- CLICK TARGETS --------
 function createClickTargets() {
-    const viewport = document.querySelector(".svg-pan-zoom_viewport");
-    const descs = document.querySelectorAll("desc");
+    const svgDoc = document.getElementById("schematicObj").contentDocument;
+const viewport = svgDoc.querySelector(".svg-pan-zoom_viewport");
+const descs = svgDoc.querySelectorAll("desc");
+const svgDoc = document.getElementById("schematicObj").contentDocument;
+const viewport = svgDoc.querySelector(".svg-pan-zoom_viewport");
+const descs = svgDoc.querySelectorAll("desc");
+
 
     descs.forEach(desc => {
         const ref = desc.textContent.trim().toUpperCase();
@@ -187,8 +99,8 @@ function zoomToComponent(ref) {
     const pos = componentPositions[ref];
     if (!pos || !panZoomInstance) return;
 
-    panZoomInstance.zoom(6);
-    panZoomInstance.pan({
+    //panZoomInstance.zoom(6);
+    //panZoomInstance.pan({
         x: -pos.x * 6 + 400,
         y: -pos.y * 6 + 300
     });
@@ -221,9 +133,4 @@ function setupSearch() {
     });
 }
 
-// -------- START --------
-window.addEventListener("load", async () => {
-    await loadBOM();
-    await loadSchematic();
-    setupSearch();
-});
+
