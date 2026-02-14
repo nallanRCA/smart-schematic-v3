@@ -78,30 +78,6 @@ if (!svg.getAttribute("viewBox")) {
 // Run when page loads
 window.addEventListener("load", loadSchematic);
 
-    panZoomInstance = svgPanZoom(svg, {
-        zoomEnabled: true,
-        controlIconsEnabled: true,
-        fit: false,
-        center: false,
-
-        minZoom: 0.5,
-        maxZoom: 20,
-        panEnabled: true,
-        dblClickZoomEnabled: true,
-        mouseWheelZoomEnabled: true,
-        preventMouseEventsDefault: false,
-        touchEnabled: true
-    });
-
-    // ⭐ REAL STARTUP VIEW
-setTimeout(() => {
-    panZoomInstance.resize();   // recalc viewer size
-    panZoomInstance.fit();      // fit once
-    panZoomInstance.center();   // center once
-    panZoomInstance.zoomBy(2.2); // 🔥 BIG zoom (this is the magic)
-}, 300);
-
-}
 panZoomInstance = svgPanZoom("#schematicSVG", {
 
     zoomEnabled: true,
