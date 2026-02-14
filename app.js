@@ -44,8 +44,9 @@ async function loadSchematic() {
     panZoomInstance = svgPanZoom(svg, {
         zoomEnabled: true,
         controlIconsEnabled: true,
-        fit: true,
-        center: true,
+        fit: false,
+        center: false,
+
         minZoom: 0.5,
         maxZoom: 20,
         panEnabled: true,
@@ -55,30 +56,42 @@ async function loadSchematic() {
         touchEnabled: true
     });
 
-    setTimeout(createClickTargets, 800);
+    // ⭐ REAL STARTUP VIEW
+setTimeout(() => {
+    panZoomInstance.resize();   // recalc viewer size
+    panZoomInstance.fit();      // fit once
+    panZoomInstance.center();   // center once
+    panZoomInstance.zoomBy(2.2); // 🔥 BIG zoom (this is the magic)
+}, 300);
+
 }
 panZoomInstance = svgPanZoom(svg, {
     zoomEnabled: true,
     controlIconsEnabled: true,
-    fit: true,
-    center: true,
+    fit: false,
+    center: false,
     minZoom: 0.5,
     maxZoom: 20,
     panEnabled: true,
     dblClickZoomEnabled: true,
     mouseWheelZoomEnabled: true,
     preventMouseEventsDefault: false,
-    touchEnabled: true
+    touchEnabled: true,
+
+    // ⭐ RUN ONLY WHEN VIEWER IS READY
+    onUpdatedCTM: function () {
+        // run once only
+        if (!panZoomInstance.startupZoomDone) {
+            panZoomInstance.startupZoomDone = true;
+
+            panZoomInstance.resize();
+            panZoomInstance.fit();
+            panZoomInstance.center();
+            panZoomInstance.zoomBy(2.5); // big readable zoom
+        }
+    }
 });
-// ⭐ DEFAULT DESKTOP ZOOM (VERY IMPORTANT)
-setTimeout(() => {
-    panZoomInstance.zoom(1.6);   // try 1.6 or 1.8 if you want bigger
-    panZoomInstance.center();
-}, 300);
 
-setTimeout(createClickTargets, 800);
-
-}
 
 
 // -------- CLICK TARGETS --------
