@@ -1,6 +1,8 @@
 let BOM = {};
 let componentPositions = {};
 let panZoomInstance;
+let zoomLevel = 1.5; // default zoom (1 = 100%)
+
 
 // -------- LOAD BOM --------
 async function loadBOM() {
