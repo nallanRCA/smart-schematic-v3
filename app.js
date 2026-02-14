@@ -31,6 +31,7 @@ let panZoomInstance;
 function loadSchematic() {
     fetch("data/schematic.svg")
 
+
         .then(res => res.text())
         .then(svgText => {
 
