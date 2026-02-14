@@ -42,21 +42,28 @@ function loadSchematic() {
 
             // Give SVG an id so library can control it
             svg.setAttribute("id", "schematicSVG");
+			// ⭐ FIX KICAD SVG (adds missing viewBox)
+if (!svg.getAttribute("viewBox")) {
+    const width = svg.getAttribute("width");
+    const height = svg.getAttribute("height");
+
+    if (width && height) {
+        svg.setAttribute("viewBox", `0 0 ${parseFloat(width)} ${parseFloat(height)}`);
+        svg.removeAttribute("width");
+        svg.removeAttribute("height");
+        console.log("viewBox added to SVG");
+    }
+}
+
 
             // --- Initialize viewer ---
             panZoomInstance = svgPanZoom("#schematicSVG", {
-                zoomEnabled: true,
-                controlIconsEnabled: true,
-                minZoom: 0.5,
-                maxZoom: 20,
-                panEnabled: true,
-                dblClickZoomEnabled: true,
-                mouseWheelZoomEnabled: true,
-                preventMouseEventsDefault: false,
-                touchEnabled: true,
-                fit: true,
-                center: true
-            });
+    zoomEnabled: true,
+    controlIconsEnabled: true,
+    fit: true,
+    center: true
+});
+
 
             // 🔥 DESKTOP STARTUP ZOOM (guaranteed working)
             setTimeout(() => {
