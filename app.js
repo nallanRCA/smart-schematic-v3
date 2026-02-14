@@ -70,13 +70,13 @@ panZoomInstance = svgPanZoom(svg, {
     preventMouseEventsDefault: false,
     touchEnabled: true
 });
-
-setTimeout(createClickTargets, 800);
 // ⭐ DEFAULT DESKTOP ZOOM (VERY IMPORTANT)
 setTimeout(() => {
     panZoomInstance.zoom(1.6);   // try 1.6 or 1.8 if you want bigger
     panZoomInstance.center();
 }, 300);
+
+setTimeout(createClickTargets, 800);
 
 }
 
