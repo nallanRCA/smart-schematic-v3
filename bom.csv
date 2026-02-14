@@ -1,0 +1,19 @@
+Ref,Value,MPN,Description,Datasheet,Image,DNP
+C1,0.47uF 250V,ECQ-U2A474ML,AC Dropper Capacitor (X2 Safety),https://industrial.panasonic.com/cdbs/www-data/pdf/RDI0000/ABD0000C258.pdf,./data/images/capacitor.jpg
+R1,2.2k,RC0603FR-072K2L,Resistor,https://www.yageo.com,./data/images/resistor.jpg
+D1,1N4004,1N4004,Rectifier Diode,https://www.onsemi.com/pdf/datasheet/1n4001-d.pdf,./data/images/diode.jpg
+D2,1N4756A,1N4756A,47V Zener Diode,https://www.onsemi.com/download/data-sheet/pdf/1n4736at-d.pdf,./data/images/zener.jpgyes
+D3,1N4756A,1N4756A,47V Zener Diode,https://www.onsemi.com,./data/images/zener.jpg
+D4,1N4756A,1N4756A,47V Zener Diode,https://www.onsemi.com,data/images/zener.jpg
+BR1,Bridge Rectifier,DF01M,1A 400V Bridge Rectifier,https://www.diodes.com/assets/Datasheets/ds17001.pdf,./data/images/bridge.jpg
+C2,100uF 25V,EEU-FR1E101,Electrolytic Capacitor,https://industrial.panasonic.com/cdbs/www-data/pdf/RDF0000/ABA0000C1259.pdf,./data/images/capacitor.jpg
+D5,1N4744A,1N4744A,15V Zener Diode,https://www.onsemi.com/pdf/datasheet/1n4736at-d.pdf,./data/images/zener.jpg
+R2,100k,RC0603FR-07100KL,Resistor,https://www.yageo.com,./data/images/resistor.jpg
+C3,2.2uF,GRM188R60J225KE19,Ceramic Capacitor,https://search.murata.co.jp/Ceramy/image/img/A01X/G101/ENG/GRM188R60J225KE19-01.pdf,./data/images/capacitor.jpg
+Q1,BS170,BS170,N-Channel MOSFET,https://www.onsemi.com/pdf/datasheet/mmbf170-d.pdf,./data/images/mosfet.jpg
+BZ1,2kHz Buzzer,433-1030,Active Buzzer,https://product.tdk.com/en/system/files/dam/doc/product/sw_piezo/sw_piezo/piezo-buzzer/catalog/piezoelectronic_buzzer_ps_en.pdf,./data/images/buzzer.jpg
+ISO1,PS2501L-1,PS2501L-1,Optocoupler,https://www.renesas.com/en/document/dst/ps2501-1-ps2501-4-ps2501l-1-ps2501l-4-data-sheet,./data/images/opto.jpg
+D6,1N4756A,1N4756A,47V Zener Diode,https://www.onsemi.com,./data/images/zener.jpg,YES
+D7,1N4756A,1N4756A,47V Zener Diode,https://www.onsemi.com,./data/images/zener.jpg,YES
+D8,1N4756A,1N4756A,47V Zener Diode,https://www.onsemi.com,./data/images/zener.jpg,yes
+DNP
