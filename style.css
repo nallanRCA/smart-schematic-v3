@@ -63,3 +63,11 @@ html, body {
 #schematicViewer:active {
     cursor: grabbing;
 }
+/* Component image inside right panel */
+#componentDetails img {
+    max-width: 100%;
+    height: auto;
+    margin-top: 10px;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
