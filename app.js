@@ -74,22 +74,33 @@ setTimeout(() => {
 // SMART COMPONENT CLICK DETECTOR
 // =======================================
 
+// =======================================
+// ADVANCED COMPONENT CLICK DETECTOR
+// Works for symbol + text
+// =======================================
+
 function enableComponentClick(svg) {
 
     svg.addEventListener("click", function(event) {
 
         let el = event.target;
 
-        // Walk up the SVG tree until we find a <g> with <desc>
+        // Walk upward to nearest <g>
         while (el && el !== svg) {
 
             if (el.tagName === "g") {
-                const desc = el.querySelector("desc");
+
+                // Look for desc in THIS group
+                let desc = el.querySelector(":scope > desc");
+
+                // If not found, search inside group (text group)
+                if (!desc) {
+                    desc = el.querySelector("desc");
+                }
 
                 if (desc) {
                     const ref = desc.textContent.trim();
 
-                    // Only real components
                     if (/^[A-Z]+[0-9]+/.test(ref)) {
                         showComponent(ref);
                         return;
@@ -103,6 +114,7 @@ function enableComponentClick(svg) {
     });
 
 }
+
 
 
 // =======================================
