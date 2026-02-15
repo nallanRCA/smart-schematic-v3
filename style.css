@@ -99,3 +99,30 @@ body {
     opacity: 0.15;
     filter: grayscale(100%);
 }
+/* =====================================================
+   FIX KICAD SVG COLORS
+===================================================== */
+
+/* All wires + symbols */
+#schematicViewer svg * {
+    stroke: #ffffff !important;
+    fill: none !important;
+}
+
+/* Text labels */
+#schematicViewer svg text {
+    fill: #ffffff !important;
+    stroke: none !important;
+    font-weight: 600;
+}
+
+/* Junction dots */
+#schematicViewer svg circle {
+    fill: #ffffff !important;
+}
+
+/* Highlight still red */
+.selected-part {
+    stroke: red !important;
+    stroke-width: 3 !important;
+}
