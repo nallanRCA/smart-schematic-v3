@@ -94,12 +94,16 @@ function enableComponentClick(svg) {
 // =======================================
 let partsData = {};
 
-fetch("parts.json")
+// ⭐ Load BOM correctly on GitHub Pages
+const bomURL = window.location.origin + window.location.pathname.replace(/\/$/, "") + "/parts.json";
+
+fetch(bomURL)
     .then(res => res.json())
     .then(data => {
         partsData = data;
         console.log("BOM loaded");
     });
+
 
 
 // =======================================
