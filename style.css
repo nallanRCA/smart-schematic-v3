@@ -45,3 +45,14 @@ html, body {
     width: 100%;
     height: 100%;
 }
+/* 🔥 Fix SVG viewer full height */
+#schematicViewer {
+    width: 100%;
+    height: 100%;
+}
+
+#schematicViewer svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
