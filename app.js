@@ -121,7 +121,9 @@ function showComponent(ref) {
 
     // Fix path for GitHub Pages
    // ⭐ Works locally AND on GitHub Pages
-const imagePath = window.location.origin + "/" + part.image;
+// ⭐ Correct GitHub Pages image path
+const imagePath = window.location.origin + window.location.pathname.replace(/\/$/, "") + "/" + part.image;
+
 
 
     let html =
