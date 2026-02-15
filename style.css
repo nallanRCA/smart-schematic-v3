@@ -56,3 +56,10 @@ html, body {
     height: 100%;
     display: block;
 }
+/* Show hand cursor over schematic area */
+#schematicViewer {
+    cursor: pointer;
+}
+#schematicViewer:active {
+    cursor: grabbing;
+}
