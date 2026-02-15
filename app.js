@@ -169,29 +169,30 @@ function buildDNPPanel() {
        panel.appendChild(row);
 
 // ⭐ apply initial visibility when page loads
-toggleComponent(ref, !part.dnp);
+       toggleComponent(ref, !part.dnp);
 
     });
 }
 function toggleComponent(ref, visible) {
 
     const svg = document.getElementById("schematicSVG");
-    const groups = svg.querySelectorAll("g");
+    const descs = svg.querySelectorAll("desc");
 
-    groups.forEach(g => {
-        const desc = g.querySelector("desc");
-        if (!desc) return;
+    descs.forEach(desc => {
 
-        if (desc.textContent.trim() === ref) {
+        if (desc.textContent.trim() !== ref) return;
 
-            if (visible) {
-                g.style.display = "inline";
-            } else {
-                g.style.display = "none";
-            }
+        // ⭐ climb up to the TOP component group
+        let el = desc.parentElement;
+        while (el && el.parentElement && el.parentElement.tagName !== "svg") {
+            el = el.parentElement;
         }
+
+        // hide/show the entire component
+        el.style.display = visible ? "inline" : "none";
     });
 }
+
 
 // =======================================
 // SEARCH COMPONENTS
