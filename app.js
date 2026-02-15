@@ -1,6 +1,20 @@
 let panZoomInstance = null;
 
 window.addEventListener("load", function () {
+// ⭐ LOAD BOM FIRST
+const bomURL = window.location.origin +
+               window.location.pathname.replace(/\/$/, "") +
+               "/parts.json";
+
+fetch(bomURL)
+    .then(res => res.json())
+    .then(data => {
+        partsData = data;
+        console.log("BOM loaded");
+
+        buildDNPPanel();
+        enableSearch();
+    });
 
     fetch("data/schematic.svg")
         .then(response => response.text())
