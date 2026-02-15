@@ -16,12 +16,17 @@ window.addEventListener("load", () => {
                 return;
             }
 
-            // Inject SVG directly into page
-            document.getElementById("schematicViewer").appendChild(svg);
+           document.getElementById("schematicViewer").appendChild(svg);
 
-            svg.setAttribute("id", "schematicSVG");
-            svg.style.width = "100%";
-            svg.style.height = "100%";
+svg.setAttribute("id", "schematicSVG");
+
+/* 🔥 REMOVE KiCad fixed size (THIS IS THE LAST BUG) */
+svg.removeAttribute("width");
+svg.removeAttribute("height");
+
+svg.style.width = "100%";
+svg.style.height = "100%";
+
 
             // Give SVG a viewBox if missing
             if (!svg.getAttribute("viewBox")) {
@@ -44,9 +49,13 @@ window.addEventListener("load", () => {
                     maxZoom: 50
                 });
 
-                panZoomInstance.resize();
-                panZoomInstance.fit();
-                panZoomInstance.center();
+                // Force correct fit AFTER layout is ready
+setTimeout(() => {
+    panZoomInstance.resize();
+    panZoomInstance.fit();
+    panZoomInstance.center();
+}, 300);
+
 
                 console.log("Zoom READY");
 
