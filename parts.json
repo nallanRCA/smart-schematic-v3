@@ -1,2 +1,9 @@
 {
+"C1": {
+  "value": "0.47uF 250V",
+  "partNumber": "ECQ-U2A474ML",
+  "description": "AC Dropper Capacitor (X2 Safety)",
+  "datasheet": "https://industrial.panasonic.com/cdbs/www-data/pdf/RDI0000/ABD0000C258.pdf",
+  "image": "data/images/capacitor.jpg"
+}
 }

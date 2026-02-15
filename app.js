@@ -58,33 +58,25 @@ window.addEventListener("load", function () {
 
 
 // CLICK DETECTOR
-function enableComponentClick(svg) {
+function showComponent(ref) {
 
-    svg.addEventListener("click", function (event) {
+    const part = partsData[ref];
 
-        let el = event.target;
+    if (!part) {
+        document.getElementById("componentDetails").innerHTML =
+            "<h2>" + ref + "</h2><p>No BOM data found</p>";
+        return;
+    }
 
-        while (el && el !== svg) {
-
-            if (el.tagName === "g") {
-                const desc = el.querySelector("desc");
-
-                if (desc) {
-                    const ref = desc.textContent.trim();
-
-                    if (/^[A-Z]+[0-9]+/.test(ref)) {
-                        showComponent(ref);
-                        return;
-                    }
-                }
-            }
-
-            el = el.parentNode;
-        }
-
-    });
-
+    document.getElementById("componentDetails").innerHTML =
+        "<h2>" + ref + "</h2>" +
+        "<p><b>Value:</b> " + part.value + "</p>" +
+        "<p><b>Part Number:</b> " + part.partNumber + "</p>" +
+        "<p><b>Description:</b> " + part.description + "</p>" +
+        "<img src='" + part.image + "' width='150'><br><br>" +
+        "<button onclick=\"window.open('" + part.datasheet + "')\">Open Datasheet</button>";
 }
+
 
 
 // UPDATE RIGHT PANEL
