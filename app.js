@@ -1,21 +1,67 @@
+// ================= GLOBAL FUNCTIONS =================
+
+// Toggle DNP grey state
+window.toggleComponent = function (ref) {
+    const el = document.querySelector(`[data-ref="${ref}"]`);
+    if (!el) {
+        console.warn("Component not found:", ref);
+        return;
+    }
+    el.classList.toggle("dnp-hidden");
+};
+
+// Show component popup + highlight
+window.showComponent = function (ref) {
+    const el = document.querySelector(`[data-ref="${ref}"]`);
+    if (!el) return;
+
+    // remove previous highlight
+    document.querySelectorAll(".selected-part")
+        .forEach(e => e.classList.remove("selected-part"));
+
+    el.classList.add("selected-part");
+
+    const part = partsData[ref];
+    if (!part) return;
+
+    document.getElementById("infoRef").textContent = part.ref;
+    document.getElementById("infoValue").textContent = part.value;
+    document.getElementById("infoFootprint").textContent = part.footprint;
+
+    document.getElementById("infoDatasheet").onclick =
+        () => window.open(part.datasheet, "_blank");
+
+    document.getElementById("infoPanel").classList.add("open");
+};
+
+// =====================================================
+// GLOBAL DATA
+// =====================================================
+let partsData = {};
 let panZoomInstance = null;
 
+
+// =====================================================
+// PAGE LOAD
+// =====================================================
 window.addEventListener("load", function () {
-// ⭐ LOAD BOM FIRST
-const bomURL = window.location.origin +
-               window.location.pathname.replace(/\/$/, "") +
-               "/parts.json";
 
-fetch(bomURL)
-    .then(res => res.json())
-    .then(data => {
-        partsData = data;
-        console.log("BOM loaded");
+    // LOAD BOM
+    const bomURL = window.location.origin +
+                   window.location.pathname.replace(/\/$/, "") +
+                   "/parts.json";
 
-        buildDNPPanel();
-        enableSearch();
-    });
+    fetch(bomURL)
+        .then(res => res.json())
+        .then(data => {
+            partsData = data;
+            console.log("BOM loaded");
 
+            buildDNPPanel();
+            enableSearch();
+        });
+
+    // LOAD SVG
     fetch("data/schematic.svg")
         .then(response => response.text())
         .then(svgText => {
@@ -24,24 +70,14 @@ fetch(bomURL)
             const svgDoc = parser.parseFromString(svgText, "image/svg+xml");
             const svg = svgDoc.querySelector("svg");
 
-            if (!svg) {
-                console.error("SVG not found");
-                return;
-            }
-
-            // Inject SVG
             document.getElementById("schematicViewer").appendChild(svg);
 
             svg.setAttribute("id", "schematicSVG");
-
-            // Remove KiCad fixed size
             svg.removeAttribute("width");
             svg.removeAttribute("height");
-
             svg.style.width = "100%";
             svg.style.height = "100%";
 
-            // Start zoom engine
             setTimeout(function () {
 
                 panZoomInstance = svgPanZoom("#schematicSVG", {
@@ -56,25 +92,22 @@ fetch(bomURL)
                     maxZoom: 50
                 });
 
-                setTimeout(function () {
-                    panZoomInstance.resize();
-                    panZoomInstance.fit();
-                    panZoomInstance.center();
-                }, 300);
+                panZoomInstance.resize();
+                panZoomInstance.fit();
+                panZoomInstance.center();
 
                 enableComponentClick(svg);
 
-            }, 200);
-
+            }, 300);
         });
-
 });
 
 
-// CLICK DETECTOR
+// =====================================================
+// CLICK DETECTOR ON SVG
+// =====================================================
 function enableComponentClick(svg) {
 
-    // ⭐ show hand cursor over schematic
     svg.style.cursor = "pointer";
 
     svg.addEventListener("click", function (event) {
@@ -82,55 +115,24 @@ function enableComponentClick(svg) {
         let el = event.target;
 
         while (el && el !== svg) {
-
             if (el.tagName === "g") {
                 const desc = el.querySelector("desc");
-
                 if (desc) {
                     const ref = desc.textContent.trim();
-
                     if (/^[A-Z]+[0-9]+/.test(ref)) {
-                        showComponent(ref);
+                        window.showComponent(ref);   // ⭐ FIXED
                         return;
                     }
                 }
             }
-
             el = el.parentNode;
         }
-
     });
-
 }
-// =====================================================
-// GLOBAL DATA
-// =====================================================
-let partsData = {};
 
 
 // =====================================================
-// LOAD BOM AFTER PAGE LOAD
-// =====================================================
-window.addEventListener("load", function () {
-
-    const bomURL = window.location.origin +
-                   window.location.pathname.replace(/\/$/, "") +
-                   "/parts.json";
-
-    fetch(bomURL)
-        .then(res => res.json())
-        .then(data => {
-            partsData = data;
-            console.log("BOM loaded");
-
-            buildDNPPanel();
-            enableSearch();
-        });
-});
-
-
-// =====================================================
-// BUILD LEFT PANEL TOGGLES
+// BUILD LEFT DNP PANEL
 // =====================================================
 function buildDNPPanel() {
 
@@ -146,14 +148,21 @@ function buildDNPPanel() {
         row.innerHTML =
             `<label>
                 <input type="checkbox" ${checked}
-                onchange="toggleComponent('${ref}', this.checked)">
+                onchange="window.toggleComponent('${ref}')">
                 ${ref}
             </label>`;
 
         panel.appendChild(row);
 
-        // apply initial visibility
-        toggleComponent(ref, !part.dnp);
+        // apply initial DNP state
+        if (part.dnp) window.toggleComponent(ref);
     });
 }
 
+
+// =====================================================
+// SEARCH (placeholder)
+// =====================================================
+function enableSearch() {
+    // we reconnect search later
+}
