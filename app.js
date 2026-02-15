@@ -101,6 +101,8 @@ fetch(bomURL)
     .then(res => res.json())
     .then(data => {
         partsData = data;
+		buildDNPPanel();
+
         console.log("BOM loaded");
     });
 
@@ -143,5 +145,42 @@ const imagePath = window.location.origin + window.location.pathname.replace(/\/$
     document.getElementById("componentDetails").innerHTML = html;
 }
 
+// =======================================
+// BUILD LEFT PANEL DNP TOGGLES
+// =======================================
+function buildDNPPanel() {
+
+    const panel = document.getElementById("searchResults");
+    panel.innerHTML = "<h3>Components</h3>";
+
+    Object.keys(partsData).sort().forEach(ref => {
+
+        const part = partsData[ref];
+        const checked = part.dnp ? "" : "checked";
+
+        const row = document.createElement("div");
+        row.innerHTML =
+            `<label>
+                <input type="checkbox" ${checked} onchange="toggleComponent('${ref}', this.checked)">
+                ${ref}
+            </label>`;
+
+        panel.appendChild(row);
+    });
+}
+function toggleComponent(ref, visible) {
+
+    const svg = document.getElementById("schematicSVG");
+    const groups = svg.querySelectorAll("g");
+
+    groups.forEach(g => {
+        const desc = g.querySelector("desc");
+        if (!desc) return;
+
+        if (desc.textContent.trim() === ref) {
+            g.style.opacity = visible ? "1" : "0.1";
+        }
+    });
+}
 
 

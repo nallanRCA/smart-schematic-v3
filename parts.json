@@ -114,26 +114,30 @@
 },
 
 "D6": {
-"value": "1N4756A",
-"partNumber": "1N4756A",
-"description": "47V Zener Diode",
-"datasheet": "https://www.onsemi.com",
-"image": "data/images/zener.jpg"
+  "value": "1N4756A",
+  "partNumber": "1N4756A",
+  "description": "47V Zener Diode",
+  "datasheet": "https://www.onsemi.com",
+  "image": "data/images/zener.jpg",
+  "dnp": true
 },
 
 "D7": {
-"value": "1N4756A",
-"partNumber": "1N4756A",
-"description": "47V Zener Diode",
-"datasheet": "https://www.onsemi.com",
-"image": "data/images/zener.jpg"
+  "value": "1N4756A",
+  "partNumber": "1N4756A",
+  "description": "47V Zener Diode",
+  "datasheet": "https://www.onsemi.com",
+  "image": "data/images/zener.jpg",
+  "dnp": true
 },
 
 "D8": {
-"value": "1N4756A",
-"partNumber": "1N4756A",
-"description": "47V Zener Diode",
-"datasheet": "https://www.onsemi.com",
-"image": "data/images/zener.jpg"
+  "value": "1N4756A",
+  "partNumber": "1N4756A",
+  "description": "47V Zener Diode",
+  "datasheet": "https://www.onsemi.com",
+  "image": "data/images/zener.jpg",
+  "dnp": true
 }
+
 }
