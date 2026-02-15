@@ -68,14 +68,25 @@ function showComponent(ref) {
         return;
     }
 
-    document.getElementById("componentDetails").innerHTML =
+    let html =
         "<h2>" + ref + "</h2>" +
         "<p><b>Value:</b> " + part.value + "</p>" +
         "<p><b>Part Number:</b> " + part.partNumber + "</p>" +
-        "<p><b>Description:</b> " + part.description + "</p>" +
-        "<img src='" + part.image + "' width='150'><br><br>" +
-        "<button onclick=\"window.open('" + part.datasheet + "')\">Open Datasheet</button>";
+        "<p><b>Description:</b> " + part.description + "</p>";
+
+    // ⭐ show image if exists
+    if (part.image) {
+        html += "<img src='" + part.image + "' width='180' style='margin-top:10px'><br>";
+    }
+
+    // ⭐ datasheet button
+    if (part.datasheet) {
+        html += "<br><button onclick=\"window.open('" + part.datasheet + "')\">Open Datasheet</button>";
+    }
+
+    document.getElementById("componentDetails").innerHTML = html;
 }
+
 
 
 
