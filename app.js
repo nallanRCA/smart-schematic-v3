@@ -48,6 +48,8 @@ svg.style.height = "100%";
                     minZoom: 0.2,
                     maxZoom: 50
                 });
+// 🔥 Enable component clicking
+enableComponentClick(svg);
 
                 // Force correct fit AFTER layout is ready
 setTimeout(() => {
@@ -64,3 +66,43 @@ setTimeout(() => {
         });
 
 });
+// =======================================
+// FIND COMPONENTS FROM KiCad SVG
+// =======================================
+
+function enableComponentClick(svg) {
+
+    const groups = svg.querySelectorAll("g");
+
+    groups.forEach(group => {
+
+        const desc = group.querySelector("desc");
+        if (!desc) return;
+
+        const ref = desc.textContent.trim();
+
+        // Make mouse cursor pointer
+        group.style.cursor = "pointer";
+
+        // Click event
+        group.addEventListener("click", (e) => {
+            e.stopPropagation();
+            showComponent(ref);
+        });
+
+    });
+
+}
+
+// =======================================
+// UPDATE RIGHT PANEL
+// =======================================
+
+function showComponent(ref) {
+
+    document.getElementById("componentDetails").innerHTML = `
+        <h2>${ref}</h2>
+        <p>Component detected from schematic</p>
+    `;
+
+}
