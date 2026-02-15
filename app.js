@@ -70,31 +70,40 @@ setTimeout(() => {
 // FIND COMPONENTS FROM KiCad SVG
 // =======================================
 
+// =======================================
+// SMART COMPONENT CLICK DETECTOR
+// =======================================
+
 function enableComponentClick(svg) {
 
-    const groups = svg.querySelectorAll("g");
+    svg.addEventListener("click", function(event) {
 
-    groups.forEach(group => {
+        let el = event.target;
 
-        const desc = group.querySelector("desc");
-        if (!desc) return;
+        // Walk up the SVG tree until we find a <g> with <desc>
+        while (el && el !== svg) {
 
-        const ref = desc.textContent.trim();
-// 🔥 ignore non-components (title block, background etc.)
-if (!/^[A-Z]+[0-9]+/.test(ref)) return;
+            if (el.tagName === "g") {
+                const desc = el.querySelector("desc");
 
-        // Make mouse cursor pointer
-        group.style.cursor = "pointer";
+                if (desc) {
+                    const ref = desc.textContent.trim();
 
-        // Click event
-        group.addEventListener("click", (e) => {
-            e.stopPropagation();
-            showComponent(ref);
-        });
+                    // Only real components
+                    if (/^[A-Z]+[0-9]+/.test(ref)) {
+                        showComponent(ref);
+                        return;
+                    }
+                }
+            }
+
+            el = el.parentNode;
+        }
 
     });
 
 }
+
 
 // =======================================
 // UPDATE RIGHT PANEL
