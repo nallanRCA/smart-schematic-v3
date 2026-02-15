@@ -104,10 +104,7 @@ body {
 ===================================================== */
 
 /* All wires + symbols */
-#schematicViewer svg * {
-    stroke: #ffffff !important;
-    fill: none !important;
-}
+
 
 /* Text labels */
 #schematicViewer svg text {
@@ -125,4 +122,30 @@ body {
 .selected-part {
     stroke: red !important;
     stroke-width: 3 !important;
+}
+/* =====================================================
+   KICAD SVG COLOR FIX (SMART)
+===================================================== */
+
+/* Default line color */
+#schematicViewer svg path,
+#schematicViewer svg line,
+#schematicViewer svg polyline,
+#schematicViewer svg rect,
+#schematicViewer svg ellipse {
+    stroke: #ffffff !important;
+}
+
+/* Filled symbols (diodes, transistors, opamps etc) */
+#schematicViewer svg path[fill],
+#schematicViewer svg polygon,
+#schematicViewer svg circle {
+    fill: #ffffff !important;
+}
+
+/* Text */
+#schematicViewer svg text {
+    fill: #ffffff !important;
+    stroke: none !important;
+    font-weight: 600;
 }
