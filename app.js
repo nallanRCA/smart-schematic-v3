@@ -73,10 +73,21 @@ window.addEventListener("load", function () {
             document.getElementById("schematicViewer").appendChild(svg);
 
             svg.setAttribute("id", "schematicSVG");
-            svg.removeAttribute("width");
-            svg.removeAttribute("height");
-            svg.style.width = "100%";
-            svg.style.height = "100%";
+           // Remove fixed KiCad sizing
+svg.removeAttribute("width");
+svg.removeAttribute("height");
+
+// ⭐ Force responsive scaling
+svg.setAttribute("width", "100%");
+svg.setAttribute("height", "100%");
+
+// ⭐ CRITICAL: ensure viewBox exists
+if (!svg.getAttribute("viewBox")) {
+    const bbox = svg.getBBox();
+    svg.setAttribute("viewBox",
+        `${bbox.x} ${bbox.y} ${bbox.width} ${bbox.height}`);
+}
+
 
             setTimeout(function () {
 
@@ -92,14 +103,19 @@ window.addEventListener("load", function () {
                     maxZoom: 50
                 });
 
-                panZoomInstance.resize();
-                panZoomInstance.fit();
-                panZoomInstance.center();
+  setTimeout(() => {
+    panZoomInstance.resize();
+    panZoomInstance.fit();
+    panZoomInstance.center();
+}, 500);
+
+
+ZoomInstance.center();
+
 
                 enableComponentClick(svg);
 
-            }, 300);
-        });
+       
 });
 
 
