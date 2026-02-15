@@ -43,11 +43,24 @@ async function loadSVG() {
     });
 
     // ⭐ show viewer AFTER zoom ready
-    document.getElementById("viewer").style.visibility = "visible";
+   document.getElementById("viewer").appendChild(svg);
 
-}, 300);
+// Remove fixed KiCad sizing
+svg.removeAttribute("width");
+svg.removeAttribute("height");
 
-}
+// ⭐ CRITICAL: create a real viewBox from drawing size
+const bbox = svg.getBBox();
+svg.setAttribute("viewBox",
+    `${bbox.x} ${bbox.y} ${bbox.width} ${bbox.height}`);
+
+// make SVG responsive
+svg.setAttribute("width", "100%");
+svg.setAttribute("height", "100%");
+
+recolorSVG(svg);
+enableClick(svg);
+
 
 // RECOLOR KICAD SVG
 function recolorSVG(svg) {
