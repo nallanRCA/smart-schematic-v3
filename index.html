@@ -7,36 +7,30 @@
 </head>
 
 <body>
-<div id="container">
+
+<div id="app">
 
     <!-- LEFT PANEL -->
     <div id="leftPanel">
-        <h2>Search</h2>
-       <div id="searchBar">
-    <input id="searchBox" placeholder="Search component...">
-    <button onclick="manualSearch()">Search</button>
-</div>
-
-		
         <div id="searchResults"></div>
     </div>
 
-    <!-- MIDDLE PANEL -->
-   <div id="schematicContainer">
+    <!-- CENTER SCHEMATIC -->
     <div id="schematicViewer"></div>
 
-</div>
-
-
-    <!-- RIGHT PANEL -->
-    <div id="componentDetails">
-        <h2>Component Info</h2>
-        <p>Click a component</p>
+    <!-- RIGHT POPUP PANEL -->
+    <div id="infoPanel">
+        <h2 id="infoRef">Select a component</h2>
+        <p><b>Value:</b> <span id="infoValue"></span></p>
+        <p><b>Footprint:</b> <span id="infoFootprint"></span></p>
+        <button id="infoDatasheet">Open Datasheet</button>
     </div>
 
 </div>
-<script src="app.js?v=4"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
+<script src="app.js?v=6"></script>
 
 </body>
+
 </html>
