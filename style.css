@@ -1,36 +1,39 @@
-body {
+/* Reset */
+*{
     margin:0;
-    background:#111;
-    color:white;
-    font-family:Arial;
+    padding:0;
+    box-sizing:border-box;
 }
 
-#app {
-    display:grid;
-    grid-template-columns:240px 1fr 300px;
+/* Classic white background */
+body{
+    background:#ffffff;
+    overflow:hidden;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+/* Viewer fills screen */
+#viewer{
+    width:100vw;
     height:100vh;
+    background:#ffffff;
+    display:flex;
+    justify-content:center;
+    align-items:center;
 }
 
-#leftPanel {
-    background:#2b2b2b;
-    padding:15px;
-    overflow:auto;
+/* Container */
+#schematicContainer{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    display:flex;
+    justify-content:center;
+    align-items:center;
 }
 
-#viewer {
-    background:#111;
-}
-
-#rightPanel {
-    background:#1e1e1e;
-    padding:15px;
-}
-
-.selected {
-    stroke:red !important;
-    stroke-width:3 !important;
-}
-
-.dnp {
-    opacity:0.15;
+/* Schematic image */
+#schematicImage{
+    width:95%;
+    height:auto;
 }
