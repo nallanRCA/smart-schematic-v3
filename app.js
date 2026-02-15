@@ -82,6 +82,9 @@ setTimeout(() => {
 // =======================================
 // FINAL PRECISE COMPONENT CLICK DETECTOR
 // =======================================
+// =======================================
+// REAL KiCad component click detector
+// =======================================
 
 function enableComponentClick(svg) {
 
@@ -89,29 +92,29 @@ function enableComponentClick(svg) {
 
         let el = event.target;
 
-        while (el && el !== svg) {
-
-            if (el.tagName === "g") {
-
-                // ⭐ ONLY check direct child desc (real component group)
-                const desc = el.querySelector(":scope > desc");
-
-                if (desc) {
-                    const ref = desc.textContent.trim();
-
-                    if (/^[A-Z]+[0-9]+/.test(ref)) {
-                        showComponent(ref);
-                        return;
-                    }
-                }
-            }
-
+        // Step 1: find nearest parent group (component container)
+        while (el && el.tagName !== "g") {
             el = el.parentNode;
         }
+
+        if (!el) return;
+
+        // Step 2: search inside THIS group for desc (reference text)
+        const desc = el.querySelector("desc");
+
+        if (!desc) return;
+
+        const ref = desc.textContent.trim();
+
+        // Only real components
+        if (!/^[A-Z]+[0-9]+/.test(ref)) return;
+
+        showComponent(ref);
 
     });
 
 }
+
 
 
 
