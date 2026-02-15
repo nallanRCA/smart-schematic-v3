@@ -1,133 +1,100 @@
-/* Reset */
-html, body { margin:0; font-family: Arial; overflow:hidden; }
+/* =====================================================
+   GLOBAL
+===================================================== */
 
-#app { display:flex; height:100vh; }
-
-#leftPanel {
-    width:220px;
-    background:#2b2b2b;
-    color:white;
-    overflow:auto;
-    padding:10px;
-}
-
-#schematicViewer {
-    flex:1;
-    background:#111;
-}
-
-#infoPanel {
-    width:260px;
-    background:#1e1e1e;
-    color:white;
-    padding:15px;
-}
-
-.selected-part { stroke:red !important; stroke-width:3 !important; }
-.dnp-hidden { opacity:0.15; filter:grayscale(100%); }
-
-
-/* Main 3-panel layout */
-#container {
-    display: flex;
-    height: 100vh;   /* 🔥 THIS FIXES EVERYTHING */
-}
-
-/* Left panel */
-#leftPanel {
-    width: 250px;
-    background: #e9e9e9;
-    padding: 15px;
-    overflow-y: auto;
-}
-
-/* Right panel */
-#componentDetails {
-    width: 300px;
-    background: #e9e9e9;
-    padding: 15px;
-    overflow-y: auto;
-}
-
-/* ⭐ MIDDLE SCHEMATIC PANEL (THE IMPORTANT PART) */
-#schematicContainer {
-    flex: 1;
-    height: 100vh;
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    overflow: hidden;
     background: #111;
+    color: white;
 }
 
-#schematicObj {
-    width: 100%;
-    height: 100%;
-    background: white;
+/* 3 column layout */
+#app {
+    display: grid;
+    grid-template-columns: 240px 1fr 300px;
+    height: 100vh;
 }
 
-/* SVG fills viewer */
-#schematicContainer svg {
-    width: 100%;
-    height: 100%;
+
+/* =====================================================
+   LEFT PANEL (COMPONENT LIST)
+===================================================== */
+
+#leftPanel {
+    background: #2b2b2b;
+    padding: 15px;
+    overflow-y: auto;
+    border-right: 1px solid #444;
 }
-/* 🔥 Fix SVG viewer full height */
+
+#leftPanel h3 {
+    margin-top: 0;
+}
+
+#leftPanel label {
+    display: block;
+    padding: 4px 0;
+    cursor: pointer;
+}
+
+#leftPanel input {
+    margin-right: 6px;
+}
+
+
+/* =====================================================
+   CENTER SCHEMATIC VIEWER
+===================================================== */
+
 #schematicViewer {
-    width: 100%;
-    height: 100%;
+    position: relative;
+    background: #111;
 }
 
 #schematicViewer svg {
     width: 100%;
     height: 100%;
-    display: block;
-}
-/* Show hand cursor over schematic area */
-#schematicViewer {
-    cursor: pointer;
-}
-#schematicViewer:active {
-    cursor: grabbing;
-}
-/* Component image inside right panel */
-#componentDetails img {
-    max-width: 100%;
-    height: auto;
-    margin-top: 10px;
-    border-radius: 6px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-}
-#searchBar {
-    display: flex;
-    gap: 5px;
-    margin-bottom: 10px;
 }
 
-#searchBar input {
-    flex: 1;
-    padding: 6px;
+
+/* =====================================================
+   RIGHT INFO PANEL
+===================================================== */
+
+#infoPanel {
+    background: #1e1e1e;
+    padding: 18px;
+    border-left: 1px solid #444;
 }
 
-#searchBar button {
-    padding: 6px 10px;
-    cursor: pointer;
+#infoPanel h2 {
+    margin-top: 0;
 }
+
+#infoDatasheet {
+    margin-top: 15px;
+    padding: 8px 12px;
+    background: #3a7afe;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+
+/* =====================================================
+   INTERACTION STYLES
+===================================================== */
+
+/* highlight selected component */
 .selected-part {
     stroke: red !important;
     stroke-width: 3 !important;
 }
 
-#infoPanel {
-    position: absolute;
-    right: -350px;
-    top: 0;
-    width: 300px;
-    height: 100%;
-    background: #1e1e1e;
-    padding: 15px;
-    transition: right 0.3s ease;
-}
-
-#infoPanel.open {
-    right: 0;
-}
-
+/* DNP greyed components */
 .dnp-hidden {
     opacity: 0.15;
     filter: grayscale(100%);
