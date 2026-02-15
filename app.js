@@ -80,6 +80,8 @@ function enableComponentClick(svg) {
         if (!desc) return;
 
         const ref = desc.textContent.trim();
+// 🔥 ignore non-components (title block, background etc.)
+if (!/^[A-Z]+[0-9]+/.test(ref)) return;
 
         // Make mouse cursor pointer
         group.style.cursor = "pointer";
