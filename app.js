@@ -89,6 +89,52 @@ function enableComponentClick(svg) {
 
 }
 
+// =======================================
+// LOAD BOM DATA
+// =======================================
+let partsData = {};
+
+fetch("parts.json")
+    .then(res => res.json())
+    .then(data => {
+        partsData = data;
+        console.log("BOM loaded");
+    });
+
+
+// =======================================
+// SHOW COMPONENT INFO IN RIGHT PANEL
+// =======================================
+function showComponent(ref) {
+
+    const part = partsData[ref];
+
+    if (!part) {
+        document.getElementById("componentDetails").innerHTML =
+            "<h2>" + ref + "</h2><p>No BOM data found</p>";
+        return;
+    }
+
+    // Fix path for GitHub Pages
+    const basePath = window.location.pathname.split("/")[1];
+    const imagePath = "/" + basePath + "/" + part.image;
+
+    let html =
+        "<h2>" + ref + "</h2>" +
+        "<p><b>Value:</b> " + part.value + "</p>" +
+        "<p><b>Part Number:</b> " + part.partNumber + "</p>" +
+        "<p><b>Description:</b> " + part.description + "</p>";
+
+    if (part.image) {
+        html += "<img src='" + imagePath + "' width='180' style='margin-top:10px'><br>";
+    }
+
+    if (part.datasheet) {
+        html += "<br><a href='" + part.datasheet + "' target='_blank'>📄 Open Datasheet</a>";
+    }
+
+    document.getElementById("componentDetails").innerHTML = html;
+}
 
 
 
