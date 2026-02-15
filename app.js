@@ -90,26 +90,42 @@ enableComponentClick(svg);
 // BUILD LIST OF ALL COMPONENT REFERENCES
 // =======================================
 
-let componentRefs = [];
+
+// =======================================
+// FINAL ACCURATE KiCad CLICK DETECTOR
+// =======================================
 
 function enableComponentClick(svg) {
 
-    // Collect all reference texts from SVG
-    const texts = svg.querySelectorAll("text");
+    svg.addEventListener("click", function(event) {
 
-    texts.forEach(t => {
-        const ref = t.textContent.trim();
+        let el = event.target;
 
-        if (/^[A-Z]+[0-9]+/.test(ref)) {
-            const box = t.getBBox();
+        // Walk up DOM until we find a group that contains <desc>
+        while (el && el !== svg) {
 
-            componentRefs.push({
-                ref: ref,
-                x: box.x + box.width / 2,
-                y: box.y + box.height / 2
-            });
+            if (el.tagName === "g") {
+
+                const desc = el.querySelector("desc");
+
+                if (desc) {
+                    const ref = desc.textContent.trim();
+
+                    // Only real components (R1, C2, U3...)
+                    if (/^[A-Z]+[0-9]+/.test(ref)) {
+                        showComponent(ref);
+                        return;
+                    }
+                }
+            }
+
+            el = el.parentNode;
         }
+
     });
+
+}
+
 
     console.log("Found components:", componentRefs.length);
 
