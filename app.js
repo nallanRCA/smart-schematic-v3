@@ -2,7 +2,6 @@ let panZoomInstance = null;
 
 window.addEventListener("load", () => {
 
-    // 🔥 Load SVG as text (works on GitHub Pages)
     fetch("data/schematic.svg")
         .then(res => res.text())
         .then(svgText => {
@@ -16,23 +15,17 @@ window.addEventListener("load", () => {
                 return;
             }
 
-           document.getElementById("schematicViewer").appendChild(svg);
+            // Inject SVG into page
+            document.getElementById("schematicViewer").appendChild(svg);
 
-svg.setAttribute("id", "schematicSVG");
+            svg.setAttribute("id", "schematicSVG");
 
-/* 🔥 REMOVE KiCad fixed size (THIS IS THE LAST BUG) */
-svg.removeAttribute("width");
-svg.removeAttribute("height");
+            // Remove KiCad fixed size
+            svg.removeAttribute("width");
+            svg.removeAttribute("height");
 
-svg.style.width = "100%";
-svg.style.height = "100%";
-
-
-            // Give SVG a viewBox if missing
-            if (!svg.getAttribute("viewBox")) {
-                const bbox = svg.getBBox();
-                svg.setAttribute("viewBox", `0 0 ${bbox.width} ${bbox.height}`);
-            }
+            svg.style.width = "100%";
+            svg.style.height = "100%";
 
             // Start zoom engine
             setTimeout(() => {
@@ -48,51 +41,25 @@ svg.style.height = "100%";
                     minZoom: 0.2,
                     maxZoom: 50
                 });
-// 🔥 Enable component clicking
-enableComponentClick(svg);
 
-                // Force correct fit AFTER layout is ready
-setTimeout(() => {
-    panZoomInstance.resize();
-    panZoomInstance.fit();
-    panZoomInstance.center();
-}, 300);
-// 🔥 START COMPONENT CLICK SYSTEM
-enableComponentClick(svg);
-               
+                setTimeout(() => {
+                    panZoomInstance.resize();
+                    panZoomInstance.fit();
+                    panZoomInstance.center();
+                }, 300);
+
+                // ⭐ enable component clicking
+                enableComponentClick(svg);
 
             }, 200);
 
         });
 
 });
-// =======================================
-// FIND COMPONENTS FROM KiCad SVG
-// =======================================
-
-// =======================================
-// SMART COMPONENT CLICK DETECTOR
-// =======================================
-
-// =======================================
-// ADVANCED COMPONENT CLICK DETECTOR
-// Works for symbol + text
-// =======================================
-
-// =======================================
-// FINAL PRECISE COMPONENT CLICK DETECTOR
-// =======================================
-// =======================================
-// REAL KiCad component click detector
-// =======================================
-
-// =======================================
-// BUILD LIST OF ALL COMPONENT REFERENCES
-// =======================================
 
 
 // =======================================
-// FINAL ACCURATE KiCad CLICK DETECTOR
+// FINAL KiCad component click detector
 // =======================================
 
 function enableComponentClick(svg) {
@@ -101,17 +68,14 @@ function enableComponentClick(svg) {
 
         let el = event.target;
 
-        // Walk up DOM until we find a group that contains <desc>
         while (el && el !== svg) {
 
             if (el.tagName === "g") {
-
                 const desc = el.querySelector("desc");
 
                 if (desc) {
                     const ref = desc.textContent.trim();
 
-                    // Only real components (R1, C2, U3...)
                     if (/^[A-Z]+[0-9]+/.test(ref)) {
                         showComponent(ref);
                         return;
@@ -127,57 +91,10 @@ function enableComponentClick(svg) {
 }
 
 
-    console.log("Found components:", componentRefs.length);
-
-    // Listen for clicks anywhere on schematic
-    svg.addEventListener("click", function(event) {
-
-       // ⭐ Convert mouse position using svg-pan-zoom transform
-const point = panZoomInstance.getSVG().createSVGPoint();
-point.x = event.clientX;
-point.y = event.clientY;
-
-const svgPoint = point.matrixTransform(
-    panZoomInstance.getSVG().getScreenCTM().inverse()
-);
-
-
-        // Find nearest reference text
-        let closest = null;
-        let minDist = Infinity;
-
-        componentRefs.forEach(c => {
-            const dx = c.x - svgPoint.x;
-            const dy = c.y - svgPoint.y;
-            const dist = Math.sqrt(dx*dx + dy*dy);
-
-            if (dist < minDist) {
-                minDist = dist;
-                closest = c.ref;
-            }
-        });
-
-        // If click is near a component (threshold)
-        if (minDist < 50) {
-            showComponent(closest);
-        }
-
-    });
-}
-
-
-
-
-
-// =======================================
-// UPDATE RIGHT PANEL
-// =======================================
-
+// Update right panel
 function showComponent(ref) {
-
     document.getElementById("componentDetails").innerHTML = `
         <h2>${ref}</h2>
         <p>Component detected from schematic</p>
     `;
-
 }
