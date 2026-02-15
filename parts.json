@@ -1,24 +1,25 @@
-"C1": {
-  "value": "0.47uF 250V",
-  "partNumber": "ECQ-U2A474ML",
-  "description": "AC Dropper Capacitor (X2 Safety)",
-  "datasheet": "https://industrial.panasonic.com/cdbs/www-data/pdf/RDI0000/ABD0000C258.pdf",
-  "image": "data/images/capacitor.jpg"
-},
+{
+  "C1": {
+    "value": "0.47uF 250V",
+    "partNumber": "ECQ-U2A474ML",
+    "description": "AC Dropper Capacitor (X2 Safety)",
+    "datasheet": "https://industrial.panasonic.com/cdbs/www-data/pdf/RDI0000/ABD0000C258.pdf",
+    "image": "data/images/capacitor.jpg"
+  },
 
-"R1": {
-  "value": "2.2k",
-  "partNumber": "RC0603FR-072K2L",
-  "description": "Resistor",
-  "datasheet": "https://www.yageo.com",
-  "image": "data/images/resistor.jpg"
-},
+  "R1": {
+    "value": "2.2k",
+    "partNumber": "RC0603FR-072K2L",
+    "description": "Resistor",
+    "datasheet": "https://www.yageo.com",
+    "image": "data/images/resistor.jpg"
+  },
 
-"D1": {
-  "value": "1N4004",
-  "partNumber": "1N4004",
-  "description": "Rectifier Diode",
-  "datasheet": "https://www.onsemi.com/pdf/datasheet/1n4001-d.pdf",
-  "image": "data/images/diode.jpg"
+  "D1": {
+    "value": "1N4004",
+    "partNumber": "1N4004",
+    "description": "Rectifier Diode",
+    "datasheet": "https://www.onsemi.com/pdf/datasheet/1n4001-d.pdf",
+    "image": "data/images/diode.jpg"
+  }
 }
-
