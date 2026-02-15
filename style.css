@@ -71,3 +71,18 @@ html, body {
     border-radius: 6px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
+#searchBar {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+#searchBar input {
+    flex: 1;
+    padding: 6px;
+}
+
+#searchBar button {
+    padding: 6px 10px;
+    cursor: pointer;
+}
