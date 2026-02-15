@@ -124,28 +124,33 @@ body {
     stroke-width: 3 !important;
 }
 /* =====================================================
-   KICAD SVG COLOR FIX (SMART)
+   KICAD SVG COLOR FIX (FINAL)
 ===================================================== */
 
-/* Default line color */
+/* IMPORTANT: remove KiCad background rectangle */
+#schematicViewer svg rect:first-child {
+    fill: none !important;
+}
+
+/* Wires and symbols */
 #schematicViewer svg path,
 #schematicViewer svg line,
 #schematicViewer svg polyline,
-#schematicViewer svg rect,
 #schematicViewer svg ellipse {
     stroke: #ffffff !important;
 }
 
-/* Filled symbols (diodes, transistors, opamps etc) */
-#schematicViewer svg path[fill],
+/* Filled symbols only (NOT background) */
 #schematicViewer svg polygon,
 #schematicViewer svg circle {
     fill: #ffffff !important;
 }
 
-/* Text */
+/* Text labels */
 #schematicViewer svg text {
     fill: #ffffff !important;
     stroke: none !important;
     font-weight: 600;
 }
+
+
