@@ -57,9 +57,9 @@ setTimeout(() => {
     panZoomInstance.fit();
     panZoomInstance.center();
 }, 300);
-
-
-                console.log("Zoom READY");
+// 🔥 START COMPONENT CLICK SYSTEM
+enableComponentClick(svg);
+               
 
             }, 200);
 
@@ -116,11 +116,15 @@ function enableComponentClick(svg) {
     // Listen for clicks anywhere on schematic
     svg.addEventListener("click", function(event) {
 
-        const pt = svg.createSVGPoint();
-        pt.x = event.clientX;
-        pt.y = event.clientY;
+       // ⭐ Convert mouse position using svg-pan-zoom transform
+const point = panZoomInstance.getSVG().createSVGPoint();
+point.x = event.clientX;
+point.y = event.clientY;
 
-        const svgPoint = pt.matrixTransform(svg.getScreenCTM().inverse());
+const svgPoint = point.matrixTransform(
+    panZoomInstance.getSVG().getScreenCTM().inverse()
+);
+
 
         // Find nearest reference text
         let closest = null;
