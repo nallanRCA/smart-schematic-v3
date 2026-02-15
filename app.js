@@ -79,8 +79,3 @@ function showComponent(ref) {
 
 
 
-// UPDATE RIGHT PANEL
-function showComponent(ref) {
-    document.getElementById("componentDetails").innerHTML =
-        "<h2>" + ref + "</h2><p>Component detected from schematic</p>";
-}
