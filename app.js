@@ -166,7 +166,11 @@ function buildDNPPanel() {
                 ${ref}
             </label>`;
 
-        panel.appendChild(row);
+       panel.appendChild(row);
+
+// ⭐ apply initial visibility when page loads
+toggleComponent(ref, !part.dnp);
+
     });
 }
 function toggleComponent(ref, visible) {
