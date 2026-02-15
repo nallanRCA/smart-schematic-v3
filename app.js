@@ -86,34 +86,65 @@ setTimeout(() => {
 // REAL KiCad component click detector
 // =======================================
 
+// =======================================
+// BUILD LIST OF ALL COMPONENT REFERENCES
+// =======================================
+
+let componentRefs = [];
+
 function enableComponentClick(svg) {
 
-    svg.addEventListener("click", function(event) {
+    // Collect all reference texts from SVG
+    const texts = svg.querySelectorAll("text");
 
-        let el = event.target;
+    texts.forEach(t => {
+        const ref = t.textContent.trim();
 
-        // Step 1: find nearest parent group (component container)
-        while (el && el.tagName !== "g") {
-            el = el.parentNode;
+        if (/^[A-Z]+[0-9]+/.test(ref)) {
+            const box = t.getBBox();
+
+            componentRefs.push({
+                ref: ref,
+                x: box.x + box.width / 2,
+                y: box.y + box.height / 2
+            });
         }
-
-        if (!el) return;
-
-        // Step 2: search inside THIS group for desc (reference text)
-        const desc = el.querySelector("desc");
-
-        if (!desc) return;
-
-        const ref = desc.textContent.trim();
-
-        // Only real components
-        if (!/^[A-Z]+[0-9]+/.test(ref)) return;
-
-        showComponent(ref);
-
     });
 
+    console.log("Found components:", componentRefs.length);
+
+    // Listen for clicks anywhere on schematic
+    svg.addEventListener("click", function(event) {
+
+        const pt = svg.createSVGPoint();
+        pt.x = event.clientX;
+        pt.y = event.clientY;
+
+        const svgPoint = pt.matrixTransform(svg.getScreenCTM().inverse());
+
+        // Find nearest reference text
+        let closest = null;
+        let minDist = Infinity;
+
+        componentRefs.forEach(c => {
+            const dx = c.x - svgPoint.x;
+            const dy = c.y - svgPoint.y;
+            const dist = Math.sqrt(dx*dx + dy*dy);
+
+            if (dist < minDist) {
+                minDist = dist;
+                closest = c.ref;
+            }
+        });
+
+        // If click is near a component (threshold)
+        if (minDist < 50) {
+            showComponent(closest);
+        }
+
+    });
 }
+
 
 
 
