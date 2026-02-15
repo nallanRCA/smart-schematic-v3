@@ -88,67 +88,36 @@ function enableComponentClick(svg) {
     });
 
 }
-
-// =======================================
-// LOAD BOM DATA
-// =======================================
+// =====================================================
+// GLOBAL DATA
+// =====================================================
 let partsData = {};
 
-// ⭐ Load BOM correctly on GitHub Pages
-const bomURL = window.location.origin + window.location.pathname.replace(/\/$/, "") + "/parts.json";
 
-fetch(bomURL)
-    .then(res => res.json())
-    .then(data => {
-        partsData = data;
-		buildDNPPanel();
-        enableSearch();
+// =====================================================
+// LOAD BOM AFTER PAGE LOAD
+// =====================================================
+window.addEventListener("load", function () {
 
-        console.log("BOM loaded");
-    });
+    const bomURL = window.location.origin +
+                   window.location.pathname.replace(/\/$/, "") +
+                   "/parts.json";
 
+    fetch(bomURL)
+        .then(res => res.json())
+        .then(data => {
+            partsData = data;
+            console.log("BOM loaded");
 
-
-// =======================================
-// SHOW COMPONENT INFO IN RIGHT PANEL
-// =======================================
-function showComponent(ref) {
-
-    const part = partsData[ref];
-
-    if (!part) {
-        document.getElementById("componentDetails").innerHTML =
-            "<h2>" + ref + "</h2><p>No BOM data found</p>";
-        return;
-    }
-
-    // Fix path for GitHub Pages
-   // ⭐ Works locally AND on GitHub Pages
-// ⭐ Correct GitHub Pages image path
-const imagePath = window.location.origin + window.location.pathname.replace(/\/$/, "") + "/" + part.image;
+            buildDNPPanel();
+            enableSearch();
+        });
+});
 
 
-
-    let html =
-        "<h2>" + ref + "</h2>" +
-        "<p><b>Value:</b> " + part.value + "</p>" +
-        "<p><b>Part Number:</b> " + part.partNumber + "</p>" +
-        "<p><b>Description:</b> " + part.description + "</p>";
-
-    if (part.image) {
-        html += "<img src='" + imagePath + "' width='180' style='margin-top:10px'><br>";
-    }
-
-    if (part.datasheet) {
-        html += "<br><a href='" + part.datasheet + "' target='_blank'>📄 Open Datasheet</a>";
-    }
-
-    document.getElementById("componentDetails").innerHTML = html;
-}
-
-// =======================================
-// BUILD LEFT PANEL DNP TOGGLES
-// =======================================
+// =====================================================
+// BUILD LEFT PANEL TOGGLES
+// =====================================================
 function buildDNPPanel() {
 
     const panel = document.getElementById("searchResults");
@@ -162,102 +131,15 @@ function buildDNPPanel() {
         const row = document.createElement("div");
         row.innerHTML =
             `<label>
-                <input type="checkbox" ${checked} onchange="toggleComponent('${ref}', this.checked)">
+                <input type="checkbox" ${checked}
+                onchange="toggleComponent('${ref}', this.checked)">
                 ${ref}
             </label>`;
 
-       panel.appendChild(row);
+        panel.appendChild(row);
 
-// ⭐ apply initial visibility when page loads
-       toggleComponent(ref, !part.dnp);
-
+        // apply initial visibility
+        toggleComponent(ref, !part.dnp);
     });
 }
-function toggleComponent(ref, visible) {
-
-    const svg = document.getElementById("schematicSVG");
-    const descs = svg.querySelectorAll("desc");
-
-    descs.forEach(desc => {
-
-        if (desc.textContent.trim() !== ref) return;
-
-        // ⭐ climb up to the TOP component group
-        let el = desc.parentElement;
-        while (el && el.parentElement && el.parentElement.tagName !== "svg") {
-            el = el.parentElement;
-        }
-
-        // hide/show the entire component
-        el.style.display = visible ? "inline" : "none";
-    });
-}
-
-
-// =======================================
-// SEARCH COMPONENTS
-// =======================================
-function enableSearch() {
-
-    const searchBox = document.getElementById("searchBox");
-
-    searchBox.addEventListener("input", function() {
-        const query = this.value.toLowerCase();
-        searchComponent(query);
-    });
-}
-
-
-function searchComponent(query) {
-
-    if (!query) return;
-
-    // find matching part in BOM
-    for (const ref in partsData) {
-        const part = partsData[ref];
-
-        const text =
-            ref.toLowerCase() + " " +
-            part.value.toLowerCase() + " " +
-            part.description.toLowerCase();
-
-        if (text.includes(query)) {
-            zoomToComponent(ref);
-            showComponent(ref);
-            break;
-        }
-    }
-}
-// =======================================
-// ZOOM TO COMPONENT (used by search)
-// =======================================
-function zoomToComponent(ref) {
-
-    const svg = document.getElementById("schematicSVG");
-    const groups = svg.querySelectorAll("g");
-
-    groups.forEach(g => {
-        const desc = g.querySelector("desc");
-        if (!desc) return;
-
-        if (desc.textContent.trim() === ref) {
-
-            const bbox = g.getBBox();
-
-            const centerX = bbox.x + bbox.width / 2;
-            const centerY = bbox.y + bbox.height / 2;
-
-            // zoom in
-            panZoomInstance.zoom(4);
-
-            // pan so component is centered
-            const sizes = panZoomInstance.getSizes();
-            panZoomInstance.pan({
-                x: sizes.width / 2 - centerX * sizes.realZoom,
-                y: sizes.height / 2 - centerY * sizes.realZoom
-            });
-        }
-    });
-}
-
 
