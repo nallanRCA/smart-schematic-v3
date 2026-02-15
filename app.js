@@ -34,13 +34,19 @@ async function loadSVG() {
     enableClick(svg);
 
     setTimeout(() => {
-        panZoom = svgPanZoom(svg, {
-            zoomEnabled:true,
-            controlIconsEnabled:true,
-            fit:true,
-            center:true
-        });
-    }, 300);
+
+    panZoom = svgPanZoom(svg, {
+        zoomEnabled:true,
+        controlIconsEnabled:true,
+        fit:true,
+        center:true
+    });
+
+    // ⭐ show viewer AFTER zoom ready
+    document.getElementById("viewer").style.visibility = "visible";
+
+}, 300);
+
 }
 
 // RECOLOR KICAD SVG

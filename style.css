@@ -34,3 +34,7 @@ body {
 .dnp {
     opacity:0.15;
 }
+/* hide viewer until zoom is ready */
+#viewer {
+    visibility: hidden;
+}
