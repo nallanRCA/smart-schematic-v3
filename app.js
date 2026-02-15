@@ -217,5 +217,36 @@ function searchComponent(query) {
         }
     }
 }
+// =======================================
+// ZOOM TO COMPONENT (used by search)
+// =======================================
+function zoomToComponent(ref) {
+
+    const svg = document.getElementById("schematicSVG");
+    const groups = svg.querySelectorAll("g");
+
+    groups.forEach(g => {
+        const desc = g.querySelector("desc");
+        if (!desc) return;
+
+        if (desc.textContent.trim() === ref) {
+
+            const bbox = g.getBBox();
+
+            const centerX = bbox.x + bbox.width / 2;
+            const centerY = bbox.y + bbox.height / 2;
+
+            // zoom in
+            panZoomInstance.zoom(4);
+
+            // pan so component is centered
+            const sizes = panZoomInstance.getSizes();
+            panZoomInstance.pan({
+                x: sizes.width / 2 - centerX * sizes.realZoom,
+                y: sizes.height / 2 - centerY * sizes.realZoom
+            });
+        }
+    });
+}
 
 
