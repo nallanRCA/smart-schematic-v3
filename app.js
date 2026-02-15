@@ -1,9 +1,9 @@
 let panZoomInstance = null;
 
-window.addEventListener("load", () => {
+window.addEventListener("load", function () {
 
     fetch("data/schematic.svg")
-        .then(res => res.text())
+        .then(response => response.text())
         .then(svgText => {
 
             const parser = new DOMParser();
@@ -15,7 +15,7 @@ window.addEventListener("load", () => {
                 return;
             }
 
-            // Inject SVG into page
+            // Inject SVG
             document.getElementById("schematicViewer").appendChild(svg);
 
             svg.setAttribute("id", "schematicSVG");
@@ -28,7 +28,7 @@ window.addEventListener("load", () => {
             svg.style.height = "100%";
 
             // Start zoom engine
-            setTimeout(() => {
+            setTimeout(function () {
 
                 panZoomInstance = svgPanZoom("#schematicSVG", {
                     zoomEnabled: true,
@@ -42,13 +42,12 @@ window.addEventListener("load", () => {
                     maxZoom: 50
                 });
 
-                setTimeout(() => {
+                setTimeout(function () {
                     panZoomInstance.resize();
                     panZoomInstance.fit();
                     panZoomInstance.center();
                 }, 300);
 
-                // ⭐ enable component clicking
                 enableComponentClick(svg);
 
             }, 200);
@@ -58,13 +57,10 @@ window.addEventListener("load", () => {
 });
 
 
-// =======================================
-// FINAL KiCad component click detector
-// =======================================
-
+// CLICK DETECTOR
 function enableComponentClick(svg) {
 
-    svg.addEventListener("click", function(event) {
+    svg.addEventListener("click", function (event) {
 
         let el = event.target;
 
@@ -91,10 +87,8 @@ function enableComponentClick(svg) {
 }
 
 
-// Update right panel
+// UPDATE RIGHT PANEL
 function showComponent(ref) {
-    document.getElementById("componentDetails").innerHTML = `
-        <h2>${ref}</h2>
-        <p>Component detected from schematic</p>
-    `;
+    document.getElementById("componentDetails").innerHTML =
+        "<h2>" + ref + "</h2><p>Component detected from schematic</p>";
 }
