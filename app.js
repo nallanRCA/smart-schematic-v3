@@ -102,6 +102,7 @@ fetch(bomURL)
     .then(data => {
         partsData = data;
 		buildDNPPanel();
+        enableSearch();
 
         console.log("BOM loaded");
     });
@@ -181,6 +182,40 @@ function toggleComponent(ref, visible) {
             g.style.opacity = visible ? "1" : "0.1";
         }
     });
+}
+// =======================================
+// SEARCH COMPONENTS
+// =======================================
+function enableSearch() {
+
+    const searchBox = document.getElementById("searchBox");
+
+    searchBox.addEventListener("input", function() {
+        const query = this.value.toLowerCase();
+        searchComponent(query);
+    });
+}
+
+
+function searchComponent(query) {
+
+    if (!query) return;
+
+    // find matching part in BOM
+    for (const ref in partsData) {
+        const part = partsData[ref];
+
+        const text =
+            ref.toLowerCase() + " " +
+            part.value.toLowerCase() + " " +
+            part.description.toLowerCase();
+
+        if (text.includes(query)) {
+            zoomToComponent(ref);
+            showComponent(ref);
+            break;
+        }
+    }
 }
 
 
