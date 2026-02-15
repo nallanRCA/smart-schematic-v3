@@ -179,10 +179,16 @@ function toggleComponent(ref, visible) {
         if (!desc) return;
 
         if (desc.textContent.trim() === ref) {
-            g.style.opacity = visible ? "1" : "0.1";
+
+            if (visible) {
+                g.style.display = "inline";
+            } else {
+                g.style.display = "none";
+            }
         }
     });
 }
+
 // =======================================
 // SEARCH COMPONENTS
 // =======================================
