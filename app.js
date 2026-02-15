@@ -58,33 +58,35 @@ window.addEventListener("load", function () {
 
 
 // CLICK DETECTOR
-function showComponent(ref) {
+function enableComponentClick(svg) {
 
-    const part = partsData[ref];
+    // ⭐ show hand cursor over schematic
+    svg.style.cursor = "pointer";
 
-    if (!part) {
-        document.getElementById("componentDetails").innerHTML =
-            "<h2>" + ref + "</h2><p>No BOM data found</p>";
-        return;
-    }
+    svg.addEventListener("click", function (event) {
 
-    let html =
-        "<h2>" + ref + "</h2>" +
-        "<p><b>Value:</b> " + part.value + "</p>" +
-        "<p><b>Part Number:</b> " + part.partNumber + "</p>" +
-        "<p><b>Description:</b> " + part.description + "</p>";
+        let el = event.target;
 
-    // ⭐ show image if exists
-    if (part.image) {
-        html += "<img src='" + part.image + "' width='180' style='margin-top:10px'><br>";
-    }
+        while (el && el !== svg) {
 
-    // ⭐ datasheet button
-    if (part.datasheet) {
-        html += "<br><button onclick=\"window.open('" + part.datasheet + "')\">Open Datasheet</button>";
-    }
+            if (el.tagName === "g") {
+                const desc = el.querySelector("desc");
 
-    document.getElementById("componentDetails").innerHTML = html;
+                if (desc) {
+                    const ref = desc.textContent.trim();
+
+                    if (/^[A-Z]+[0-9]+/.test(ref)) {
+                        showComponent(ref);
+                        return;
+                    }
+                }
+            }
+
+            el = el.parentNode;
+        }
+
+    });
+
 }
 
 
