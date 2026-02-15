@@ -1,21 +1,33 @@
+// =====================================================
+// GLOBAL DATA
+// =====================================================
 let parts = {};
 let panZoom;
 
-// LOAD EVERYTHING
+
+// =====================================================
+// APP START
+// =====================================================
 window.onload = async () => {
     await loadParts();
     await loadSVG();
     buildLeftPanel();
 };
 
+
+// =====================================================
 // LOAD BOM
+// =====================================================
 async function loadParts() {
     const res = await fetch("parts.json");
     parts = await res.json();
     console.log("BOM loaded");
 }
 
-// LOAD SVG
+
+// =====================================================
+// LOAD + PREPARE SVG
+// =====================================================
 async function loadSVG() {
 
     const res = await fetch("data/schematic.svg");
@@ -25,97 +37,17 @@ async function loadSVG() {
     const svgDoc = parser.parseFromString(text, "image/svg+xml");
     const svg = svgDoc.querySelector("svg");
 
-    document.getElementById("viewer").appendChild(svg);
+    const viewer = document.getElementById("viewer");
+    viewer.appendChild(svg);
 
+    // Remove KiCad fixed sizing
     svg.removeAttribute("width");
     svg.removeAttribute("height");
 
-    recolorSVG(svg);
-    enableClick(svg);
+    // ⭐ Create proper viewBox from drawing size
+    const bbox = svg.getBBox();
+    svg.setAttribute("viewBox",
+        `${bbox.x} ${bbox.y} ${bbox.width} ${bbox.height}`);
 
-    setTimeout(() => {
-
-    panZoom = svgPanZoom(svg, {
-        zoomEnabled:true,
-        controlIconsEnabled:true,
-        fit:true,
-        center:true
-    });
-
-    // ⭐ show viewer AFTER zoom ready
-   document.getElementById("viewer").appendChild(svg);
-
-// Remove fixed KiCad sizing
-svg.removeAttribute("width");
-svg.removeAttribute("height");
-
-// ⭐ CRITICAL: create a real viewBox from drawing size
-const bbox = svg.getBBox();
-svg.setAttribute("viewBox",
-    `${bbox.x} ${bbox.y} ${bbox.width} ${bbox.height}`);
-
-// make SVG responsive
-svg.setAttribute("width", "100%");
-svg.setAttribute("height", "100%");
-
-recolorSVG(svg);
-enableClick(svg);
-
-
-// RECOLOR KICAD SVG
-function recolorSVG(svg) {
-    svg.querySelectorAll("*").forEach(el => {
-        if (el.getAttribute("stroke"))
-            el.setAttribute("stroke","#fff");
-
-        if (el.getAttribute("fill") && el.getAttribute("fill") !== "none")
-            el.setAttribute("fill","#fff");
-    });
-}
-
-// CLICK COMPONENT
-function enableClick(svg) {
-    svg.addEventListener("click", e => {
-        let el = e.target;
-        while (el && el !== svg) {
-            const desc = el.querySelector("desc");
-            if (desc) {
-                showComponent(desc.textContent.trim());
-                return;
-            }
-            el = el.parentNode;
-        }
-    });
-}
-
-// SHOW RIGHT PANEL
-function showComponent(ref) {
-    const part = parts[ref];
-    if (!part) return;
-
-    document.getElementById("ref").textContent = ref;
-    document.getElementById("value").textContent = part.value;
-    document.getElementById("footprint").textContent = part.footprint;
-    document.getElementById("datasheetBtn").onclick =
-        ()=> window.open(part.datasheet);
-}
-
-// BUILD LEFT PANEL
-function buildLeftPanel() {
-    const list = document.getElementById("componentList");
-
-    Object.keys(parts).forEach(ref => {
-        const row = document.createElement("div");
-        row.innerHTML =
-        `<label>
-           <input type="checkbox" checked onchange="toggleDNP('${ref}')">
-           ${ref}
-         </label>`;
-        list.appendChild(row);
-    });
-}
-
-function toggleDNP(ref){
-    const el = document.querySelector(`[data-ref="${ref}"]`);
-    if(el) el.classList.toggle("dnp");
-}
+    svg.setAttribute("width", "100%");
+    svg.se
