@@ -79,24 +79,22 @@ setTimeout(() => {
 // Works for symbol + text
 // =======================================
 
+// =======================================
+// FINAL PRECISE COMPONENT CLICK DETECTOR
+// =======================================
+
 function enableComponentClick(svg) {
 
     svg.addEventListener("click", function(event) {
 
         let el = event.target;
 
-        // Walk upward to nearest <g>
         while (el && el !== svg) {
 
             if (el.tagName === "g") {
 
-                // Look for desc in THIS group
-                let desc = el.querySelector(":scope > desc");
-
-                // If not found, search inside group (text group)
-                if (!desc) {
-                    desc = el.querySelector("desc");
-                }
+                // ⭐ ONLY check direct child desc (real component group)
+                const desc = el.querySelector(":scope > desc");
 
                 if (desc) {
                     const ref = desc.textContent.trim();
