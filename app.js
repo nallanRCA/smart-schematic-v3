@@ -1,184 +1,102 @@
-// ================= GLOBAL FUNCTIONS =================
+let parts = {};
+let panZoom;
 
-// Toggle DNP grey state
-window.toggleComponent = function (ref) {
-    const el = document.querySelector(`[data-ref="${ref}"]`);
-    if (!el) {
-        console.warn("Component not found:", ref);
-        return;
-    }
-    el.classList.toggle("dnp-hidden");
+// LOAD EVERYTHING
+window.onload = async () => {
+    await loadParts();
+    await loadSVG();
+    buildLeftPanel();
 };
 
-// Show component popup + highlight
-window.showComponent = function (ref) {
-    const el = document.querySelector(`[data-ref="${ref}"]`);
-    if (!el) return;
-
-    // remove previous highlight
-    document.querySelectorAll(".selected-part")
-        .forEach(e => e.classList.remove("selected-part"));
-
-    el.classList.add("selected-part");
-
-    const part = partsData[ref];
-    if (!part) return;
-
-    document.getElementById("infoRef").textContent = part.ref;
-    document.getElementById("infoValue").textContent = part.value;
-    document.getElementById("infoFootprint").textContent = part.footprint;
-
-    document.getElementById("infoDatasheet").onclick =
-        () => window.open(part.datasheet, "_blank");
-
-    document.getElementById("infoPanel").classList.add("open");
-};
-
-// =====================================================
-// GLOBAL DATA
-// =====================================================
-let partsData = {};
-let panZoomInstance = null;
-
-
-// =====================================================
-// PAGE LOAD
-// =====================================================
-window.addEventListener("load", function () {
-
-    // LOAD BOM
-    const bomURL = window.location.origin +
-                   window.location.pathname.replace(/\/$/, "") +
-                   "/parts.json";
-
-    fetch(bomURL)
-        .then(res => res.json())
-        .then(data => {
-            partsData = data;
-            console.log("BOM loaded");
-
-            buildDNPPanel();
-            enableSearch();
-        });
-
-    // LOAD SVG
-    fetch("data/schematic.svg")
-        .then(response => response.text())
-        .then(svgText => {
-
-            const parser = new DOMParser();
-            const svgDoc = parser.parseFromString(svgText, "image/svg+xml");
-            const svg = svgDoc.querySelector("svg");
-
-            document.getElementById("schematicViewer").appendChild(svg);
-
-            svg.setAttribute("id", "schematicSVG");
-           // Remove fixed KiCad sizing
-svg.removeAttribute("width");
-svg.removeAttribute("height");
-
-// ⭐ Force responsive scaling
-svg.setAttribute("width", "100%");
-svg.setAttribute("height", "100%");
-
-// ⭐ CRITICAL: ensure viewBox exists
-if (!svg.getAttribute("viewBox")) {
-    const bbox = svg.getBBox();
-    svg.setAttribute("viewBox",
-        `${bbox.x} ${bbox.y} ${bbox.width} ${bbox.height}`);
+// LOAD BOM
+async function loadParts() {
+    const res = await fetch("parts.json");
+    parts = await res.json();
+    console.log("BOM loaded");
 }
 
+// LOAD SVG
+async function loadSVG() {
 
-            setTimeout(function () {
+    const res = await fetch("data/schematic.svg");
+    const text = await res.text();
 
-                panZoomInstance = svgPanZoom("#schematicSVG", {
-                    zoomEnabled: true,
-                    controlIconsEnabled: true,
-                    fit: true,
-                    center: true,
-                    panEnabled: true,
-                    mouseWheelZoomEnabled: true,
-                    dblClickZoomEnabled: true,
-                    minZoom: 0.2,
-                    maxZoom: 50
-                });
+    const parser = new DOMParser();
+    const svgDoc = parser.parseFromString(text, "image/svg+xml");
+    const svg = svgDoc.querySelector("svg");
 
-  setTimeout(() => {
-    panZoomInstance.resize();
-    panZoomInstance.fit();
-    panZoomInstance.center();
-}, 500);
+    document.getElementById("viewer").appendChild(svg);
 
+    svg.removeAttribute("width");
+    svg.removeAttribute("height");
 
-ZoomInstance.center();
+    recolorSVG(svg);
+    enableClick(svg);
 
+    setTimeout(() => {
+        panZoom = svgPanZoom(svg, {
+            zoomEnabled:true,
+            controlIconsEnabled:true,
+            fit:true,
+            center:true
+        });
+    }, 300);
+}
 
-                enableComponentClick(svg);
+// RECOLOR KICAD SVG
+function recolorSVG(svg) {
+    svg.querySelectorAll("*").forEach(el => {
+        if (el.getAttribute("stroke"))
+            el.setAttribute("stroke","#fff");
 
-       
-});
+        if (el.getAttribute("fill") && el.getAttribute("fill") !== "none")
+            el.setAttribute("fill","#fff");
+    });
+}
 
-
-// =====================================================
-// CLICK DETECTOR ON SVG
-// =====================================================
-function enableComponentClick(svg) {
-
-    svg.style.cursor = "pointer";
-
-    svg.addEventListener("click", function (event) {
-
-        let el = event.target;
-
+// CLICK COMPONENT
+function enableClick(svg) {
+    svg.addEventListener("click", e => {
+        let el = e.target;
         while (el && el !== svg) {
-            if (el.tagName === "g") {
-                const desc = el.querySelector("desc");
-                if (desc) {
-                    const ref = desc.textContent.trim();
-                    if (/^[A-Z]+[0-9]+/.test(ref)) {
-                        window.showComponent(ref);   // ⭐ FIXED
-                        return;
-                    }
-                }
+            const desc = el.querySelector("desc");
+            if (desc) {
+                showComponent(desc.textContent.trim());
+                return;
             }
             el = el.parentNode;
         }
     });
 }
 
+// SHOW RIGHT PANEL
+function showComponent(ref) {
+    const part = parts[ref];
+    if (!part) return;
 
-// =====================================================
-// BUILD LEFT DNP PANEL
-// =====================================================
-function buildDNPPanel() {
+    document.getElementById("ref").textContent = ref;
+    document.getElementById("value").textContent = part.value;
+    document.getElementById("footprint").textContent = part.footprint;
+    document.getElementById("datasheetBtn").onclick =
+        ()=> window.open(part.datasheet);
+}
 
-    const panel = document.getElementById("searchResults");
-    panel.innerHTML = "<h3>Components</h3>";
+// BUILD LEFT PANEL
+function buildLeftPanel() {
+    const list = document.getElementById("componentList");
 
-    Object.keys(partsData).sort().forEach(ref => {
-
-        const part = partsData[ref];
-        const checked = part.dnp ? "" : "checked";
-
+    Object.keys(parts).forEach(ref => {
         const row = document.createElement("div");
         row.innerHTML =
-            `<label>
-                <input type="checkbox" ${checked}
-                onchange="window.toggleComponent('${ref}')">
-                ${ref}
-            </label>`;
-
-        panel.appendChild(row);
-
-        // apply initial DNP state
-        if (part.dnp) window.toggleComponent(ref);
+        `<label>
+           <input type="checkbox" checked onchange="toggleDNP('${ref}')">
+           ${ref}
+         </label>`;
+        list.appendChild(row);
     });
 }
 
-
-// =====================================================
-// SEARCH (placeholder)
-// =====================================================
-function enableSearch() {
-    // we reconnect search later
+function toggleDNP(ref){
+    const el = document.querySelector(`[data-ref="${ref}"]`);
+    if(el) el.classList.toggle("dnp");
 }

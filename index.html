@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
     <title>Smart Schematic V3</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -9,28 +8,23 @@
 <body>
 
 <div id="app">
-
-    <!-- LEFT PANEL -->
     <div id="leftPanel">
-        <div id="searchResults"></div>
+        <h2>Components</h2>
+        <div id="componentList"></div>
     </div>
 
-    <!-- CENTER SCHEMATIC -->
-    <div id="schematicViewer"></div>
+    <div id="viewer"></div>
 
-    <!-- RIGHT POPUP PANEL -->
-    <div id="infoPanel">
-        <h2 id="infoRef">Select a component</h2>
-        <p><b>Value:</b> <span id="infoValue"></span></p>
-        <p><b>Footprint:</b> <span id="infoFootprint"></span></p>
-        <button id="infoDatasheet">Open Datasheet</button>
+    <div id="rightPanel">
+        <h2 id="ref">Select a component</h2>
+        <p><b>Value:</b> <span id="value"></span></p>
+        <p><b>Footprint:</b> <span id="footprint"></span></p>
+        <button id="datasheetBtn">Open Datasheet</button>
     </div>
-
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
-<script src="app.js?v=6"></script>
+<script src="app.js"></script>
 
 </body>
-
 </html>

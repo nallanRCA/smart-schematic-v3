@@ -1,156 +1,36 @@
-/* =====================================================
-   GLOBAL
-===================================================== */
-
 body {
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    overflow: hidden;
-    background: #111;
-    color: white;
+    margin:0;
+    background:#111;
+    color:white;
+    font-family:Arial;
 }
 
-/* 3 column layout */
 #app {
-    display: grid;
-    grid-template-columns: 240px 1fr 300px;
-    height: 100vh;
+    display:grid;
+    grid-template-columns:240px 1fr 300px;
+    height:100vh;
 }
-
-
-/* =====================================================
-   LEFT PANEL (COMPONENT LIST)
-===================================================== */
 
 #leftPanel {
-    background: #2b2b2b;
-    padding: 15px;
-    overflow-y: auto;
-    border-right: 1px solid #444;
+    background:#2b2b2b;
+    padding:15px;
+    overflow:auto;
 }
 
-#leftPanel h3 {
-    margin-top: 0;
+#viewer {
+    background:#111;
 }
 
-#leftPanel label {
-    display: block;
-    padding: 4px 0;
-    cursor: pointer;
+#rightPanel {
+    background:#1e1e1e;
+    padding:15px;
 }
 
-#leftPanel input {
-    margin-right: 6px;
+.selected {
+    stroke:red !important;
+    stroke-width:3 !important;
 }
 
-
-/* =====================================================
-   CENTER SCHEMATIC VIEWER
-===================================================== */
-
-#schematicViewer {
-    position: relative;
-    background: #111;
+.dnp {
+    opacity:0.15;
 }
-
-#schematicViewer svg {
-    width: 100%;
-    height: 100%;
-}
-
-
-/* =====================================================
-   RIGHT INFO PANEL
-===================================================== */
-
-#infoPanel {
-    background: #1e1e1e;
-    padding: 18px;
-    border-left: 1px solid #444;
-}
-
-#infoPanel h2 {
-    margin-top: 0;
-}
-
-#infoDatasheet {
-    margin-top: 15px;
-    padding: 8px 12px;
-    background: #3a7afe;
-    border: none;
-    color: white;
-    cursor: pointer;
-    border-radius: 4px;
-}
-
-
-/* =====================================================
-   INTERACTION STYLES
-===================================================== */
-
-/* highlight selected component */
-.selected-part {
-    stroke: red !important;
-    stroke-width: 3 !important;
-}
-
-/* DNP greyed components */
-.dnp-hidden {
-    opacity: 0.15;
-    filter: grayscale(100%);
-}
-/* =====================================================
-   FIX KICAD SVG COLORS
-===================================================== */
-
-/* All wires + symbols */
-
-
-/* Text labels */
-#schematicViewer svg text {
-    fill: #ffffff !important;
-    stroke: none !important;
-    font-weight: 600;
-}
-
-/* Junction dots */
-#schematicViewer svg circle {
-    fill: #ffffff !important;
-}
-
-/* Highlight still red */
-.selected-part {
-    stroke: red !important;
-    stroke-width: 3 !important;
-}
-/* =====================================================
-   KICAD SVG COLOR FIX (FINAL)
-===================================================== */
-
-/* IMPORTANT: remove KiCad background rectangle */
-#schematicViewer svg rect:first-child {
-    fill: none !important;
-}
-
-/* Wires and symbols */
-#schematicViewer svg path,
-#schematicViewer svg line,
-#schematicViewer svg polyline,
-#schematicViewer svg ellipse {
-    stroke: #ffffff !important;
-}
-
-/* Filled symbols only (NOT background) */
-#schematicViewer svg polygon,
-#schematicViewer svg circle {
-    fill: #ffffff !important;
-}
-
-/* Text labels */
-#schematicViewer svg text {
-    fill: #ffffff !important;
-    stroke: none !important;
-    font-weight: 600;
-}
-
-
