@@ -22,4 +22,116 @@
     "datasheet": "https://www.onsemi.com/pdf/datasheet/1n4001-d.pdf",
     "image": "data/images/diode.jpg"
   }
+  "D2": {
+  "value": "1N4756A",
+  "partNumber": "1N4756A",
+  "description": "47V Zener Diode",
+  "datasheet": "https://www.onsemi.com/download/data-sheet/pdf/1n4736at-d.pdf",
+  "image": "data/images/zener.jpg"
+},
+
+"D3": {
+  "value": "1N4756A",
+  "partNumber": "1N4756A",
+  "description": "47V Zener Diode",
+  "datasheet": "https://www.onsemi.com",
+  "image": "data/images/zener.jpg"
+},
+
+"D4": {
+  "value": "1N4756A",
+  "partNumber": "1N4756A",
+  "description": "47V Zener Diode",
+  "datasheet": "https://www.onsemi.com",
+  "image": "data/images/zener.jpg"
+},
+
+"BR1": {
+  "value": "Bridge Rectifier",
+  "partNumber": "DF01M",
+  "description": "1A 400V Bridge Rectifier",
+  "datasheet": "https://www.diodes.com/assets/Datasheets/ds17001.pdf",
+  "image": "data/images/bridge.jpg"
+},
+
+"C2": {
+  "value": "100uF 25V",
+  "partNumber": "EEU-FR1E101",
+  "description": "Electrolytic Capacitor",
+  "datasheet": "https://industrial.panasonic.com/cdbs/www-data/pdf/RDF0000/ABA0000C1259.pdf",
+  "image": "data/images/capacitor.jpg"
+},
+
+"D5": {
+  "value": "1N4744A",
+  "partNumber": "1N4744A",
+  "description": "15V Zener Diode",
+  "datasheet": "https://www.onsemi.com/pdf/datasheet/1n4736at-d.pdf",
+  "image": "data/images/zener.jpg"
+},
+
+"R2": {
+  "value": "100k",
+  "partNumber": "RC0603FR-07100KL",
+  "description": "Resistor",
+  "datasheet": "https://www.yageo.com",
+  "image": "data/images/resistor.jpg"
+},
+
+"C3": {
+  "value": "2.2uF",
+  "partNumber": "GRM188R60J225KE19",
+  "description": "Ceramic Capacitor",
+  "datasheet": "https://search.murata.co.jp/Ceramy/image/img/A01X/G101/ENG/GRM188R60J225KE19-01.pdf",
+  "image": "data/images/capacitor.jpg"
+},
+
+"Q1": {
+  "value": "BS170",
+  "partNumber": "BS170",
+  "description": "N-Channel MOSFET",
+  "datasheet": "https://www.onsemi.com/pdf/datasheet/mmbf170-d.pdf",
+  "image": "data/images/mosfet.jpg"
+},
+
+"BZ1": {
+  "value": "2kHz Buzzer",
+  "partNumber": "433-1030",
+  "description": "Active Buzzer",
+  "datasheet": "https://product.tdk.com/en/system/files/dam/doc/product/sw_piezo/sw_piezo/piezo-buzzer/catalog/piezoelectronic_buzzer_ps_en.pdf",
+  "image": "data/images/buzzer.jpg"
+},
+
+"ISO1": {
+  "value": "PS2501L-1",
+  "partNumber": "PS2501L-1",
+  "description": "Optocoupler",
+  "datasheet": "https://www.renesas.com/en/document/dst/ps2501-1-ps2501-4-ps2501l-1-ps2501l-4-data-sheet",
+  "image": "data/images/opto.jpg"
+},
+
+"D6": {
+  "value": "1N4756A",
+  "partNumber": "1N4756A",
+  "description": "47V Zener Diode",
+  "datasheet": "https://www.onsemi.com",
+  "image": "data/images/zener.jpg"
+},
+
+"D7": {
+  "value": "1N4756A",
+  "partNumber": "1N4756A",
+  "description": "47V Zener Diode",
+  "datasheet": "https://www.onsemi.com",
+  "image": "data/images/zener.jpg"
+},
+
+"D8": {
+  "value": "1N4756A",
+  "partNumber": "1N4756A",
+  "description": "47V Zener Diode",
+  "datasheet": "https://www.onsemi.com",
+  "image": "data/images/zener.jpg"
+}
+
 }
