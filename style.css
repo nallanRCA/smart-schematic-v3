@@ -1,36 +1,80 @@
-body {
-    margin:0;
-    background:#111;
-    color:white;
-    font-family:Arial;
+html, body {
+    margin: 0;
+    height: 100%;
+    overflow: hidden;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
+/* Main app layout */
 #app {
-    display:grid;
-    grid-template-columns:240px 1fr 300px;
-    height:100vh;
+    display: grid;
+    grid-template-columns: 260px 1fr 320px;
+    height: 100vh;
 }
 
+/* LEFT PANEL */
 #leftPanel {
-    background:#2b2b2b;
-    padding:15px;
-    overflow:auto;
+    background: #1e1e1e;
+    color: white;
+    padding: 20px;
+    border-right: 2px solid #333;
 }
 
+#leftPanel h2 {
+    margin-top: 0;
+}
+
+#toggleDNP {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    background: #ff9800;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* CENTER SCHEMATIC */
 #viewer {
-    background:#111;
+    background: #111;
+    display: flex;
 }
 
+#schematicContainer {
+    width: 100%;
+    height: 100%;
+}
+
+#schematicImage {
+    width: 100%;
+    height: 100%;
+}
+
+/* RIGHT PANEL */
 #rightPanel {
-    background:#1e1e1e;
-    padding:15px;
+    background: #f4f4f4;
+    padding: 20px;
+    border-left: 2px solid #ccc;
 }
 
-.selected {
-    stroke:red !important;
-    stroke-width:3 !important;
+#infoBox {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    min-height: 200px;
+}
+#leftPanel button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    font-size: 15px;
+    background: #444;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
 }
 
-.dnp {
-    opacity:0.15;
+#leftPanel button:hover {
+    background: #666;
 }

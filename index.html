@@ -1,30 +1,55 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Smart Schematic V3</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>Smart Schematic</title>
+<link rel="stylesheet" href="style.css">
 </head>
 
-<body>
+ <<body>
 
 <div id="app">
+
+    <!-- LEFT PANEL -->
     <div id="leftPanel">
-        <h2>Components</h2>
-        <div id="componentList"></div>
-    </div>
+       <div id="leftPanel">
+    <h2>Controls</h2>
 
-    <div id="viewer"></div>
+    <button id="toggleDNP">Toggle DNP</button>
 
-    <div id="rightPanel">
-        <h2 id="ref">Select a component</h2>
-        <p><b>Value:</b> <span id="value"></span></p>
-        <p><b>Footprint:</b> <span id="footprint"></span></p>
-        <button id="datasheetBtn">Open Datasheet</button>
-    </div>
+    <hr>
+
+    <h3>Zoom</h3>
+    <button id="zoomIn">Zoom In</button>
+    <button id="zoomOut">Zoom Out</button>
+    <button id="zoomReset">Reset View</button>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
-<script src="app.js"></script>
+    </div>
+
+    <!-- CENTER PANEL -->
+    <div id="viewer">
+        <div id="schematicContainer">
+            <object id="schematicImage"
+                    type="image/svg+xml"
+                    data="schematic.svg">
+            </object>
+        </div>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div id="rightPanel">
+        <h2>Component Info</h2>
+        <div id="infoBox">
+            Click a component to see details
+        </div>
+    </div>
+
+</div>
+
+<script src="svg-pan-zoom.min.js"></script>
+<script src="script.js"></script>
 
 </body>
+
 </html>
