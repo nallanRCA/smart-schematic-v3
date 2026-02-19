@@ -1,11 +1,11 @@
 Ref,Value,MPN,Description,Datasheet,Image,DNP
-C1,0.47uF 250V,ECQ-U2A474ML,AC Dropper Capacitor (X2 Safety),https://industrial.panasonic.com/cdbs/www-data/pdf/RDI0000/ABD0000C258.pdf,./data/images/capacitor.jpg
+C1,0.47uF 250V,ECQ-U2A474ML,AC Dropper Capacitor (X2 Safety),https://industrial.panasonic.com/cdbs/www-data/pdf/RDI0000/ABD0000C258.pdf,./data/images/capacitor.jpg,DNP
 R1,2.2k,RC0603FR-072K2L,Resistor,https://www.yageo.com,./data/images/resistor.jpg
-D1,1N4004,1N4004,Rectifier Diode,https://www.onsemi.com/pdf/datasheet/1n4001-d.pdf,./data/images/diode.jpg
-D2,1N4756A,1N4756A,47V Zener Diode,https://www.onsemi.com/download/data-sheet/pdf/1n4736at-d.pdf,./data/images/zener.jpgyes
+D1,1N4004,1N4004,Rectifier Diode,https://www.onsemi.com/pdf/datasheet/1n4001-d.pdf,./data/images/diode.jpg,DNP
+D2,1N4756A,1N4756A,47V Zener Diode,https://www.onsemi.com/download/data-sheet/pdf/1n4736at-d.pdf,./data/images/zener.jpgyes,DNP
 D3,1N4756A,1N4756A,47V Zener Diode,https://www.onsemi.com,./data/images/zener.jpg
 D4,1N4756A,1N4756A,47V Zener Diode,https://www.onsemi.com,data/images/zener.jpg
-BR1,Bridge Rectifier,DF01M,1A 400V Bridge Rectifier,https://www.diodes.com/assets/Datasheets/ds17001.pdf,./data/images/bridge.jpg
+BR1,Bridge Rectifier,DF01M,1A 400V Bridge Rectifier,https://www.diodes.com/assets/Datasheets/ds17001.pdf,./data/images/bridge.jpg,DNP
 C2,100uF 25V,EEU-FR1E101,Electrolytic Capacitor,https://industrial.panasonic.com/cdbs/www-data/pdf/RDF0000/ABA0000C1259.pdf,./data/images/capacitor.jpg
 D5,1N4744A,1N4744A,15V Zener Diode,https://www.onsemi.com/pdf/datasheet/1n4736at-d.pdf,./data/images/zener.jpg
 R2,100k,RC0603FR-07100KL,Resistor,https://www.yageo.com,./data/images/resistor.jpg
@@ -16,4 +16,5 @@ ISO1,PS2501L-1,PS2501L-1,Optocoupler,https://www.renesas.com/en/document/dst/ps2
 D6,1N4756A,1N4756A,47V Zener Diode,https://www.onsemi.com,./data/images/zener.jpg,YES
 D7,1N4756A,1N4756A,47V Zener Diode,https://www.onsemi.com,./data/images/zener.jpg,YES
 D8,1N4756A,1N4756A,47V Zener Diode,https://www.onsemi.com,./data/images/zener.jpg,yes
+
 DNP

@@ -2,30 +2,45 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Smart Schematic</title>
+<title>Smart Schematic V3</title>
+<p>TEST TEXT</p>
+
 <link rel="stylesheet" href="style.css">
 </head>
 
- <<body>
+<body>
 
 <div id="app">
 
     <!-- LEFT PANEL -->
     <div id="leftPanel">
-       <div id="leftPanel">
-    <h2>Controls</h2>
 
-    <button id="toggleDNP">Toggle DNP</button>
-
-    <hr>
-
-    <h3>Zoom</h3>
-    <button id="zoomIn">Zoom In</button>
-    <button id="zoomOut">Zoom Out</button>
-    <button id="zoomReset">Reset View</button>
+    <h2>Smart Schematic</h2>
+<div class="panelSection">
+    <h3>Search Component</h3>
+    <input id="searchInput" placeholder="Ex: R12, C5, U1">
+    <button onclick="searchComponent()">Search</button>
 </div>
 
+    <div class="panelSection">
+        <h3>Assembly</h3>
+        <button id="toggleDNP">Show / Hide DNP</button>
     </div>
+
+    <div class="panelSection">
+        <h3>Zoom</h3>
+        <button id="zoomIn">Zoom In</button>
+        <button id="zoomOut">Zoom Out</button>
+        <button id="zoomReset">Reset View</button>
+    </div>
+
+    <div class="panelSection">
+        <h3>View</h3>
+        <button id="fitScreen">Fit to Screen</button>
+    </div>
+
+</div>
+
 
     <!-- CENTER PANEL -->
     <div id="viewer">
@@ -41,7 +56,8 @@
     <div id="rightPanel">
         <h2>Component Info</h2>
         <div id="infoBox">
-            Click a component to see details
+            Select a component in the schematic
+
         </div>
     </div>
 
@@ -51,5 +67,4 @@
 <script src="script.js"></script>
 
 </body>
-
 </html>
