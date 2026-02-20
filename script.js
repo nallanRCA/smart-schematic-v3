@@ -4,7 +4,41 @@
 
 let panZoomInstance = null;
 let svgDoc = null;
+// ===============================
+// LOAD BOM CSV
+// ===============================
+// ===============================
+// LOAD BOM CSV (SAFE VERSION)
+// ===============================
+let bomData = [];
 
+fetch("data/bom.csv")
+    .then(response => response.text())
+    .then(csv => {
+
+        const rows = csv.split(/\r?\n/).filter(r => r.trim() !== "");
+        const headers = rows[0].split(",");
+
+        for (let i = 1; i < rows.length; i++) {
+
+            // Handle quoted CSV properly
+            const values = rows[i].match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g);
+
+            if (!values) continue;
+
+            const obj = {};
+
+            headers.forEach((header, index) => {
+                obj[header.trim()] = values[index]
+                    ? values[index].replace(/^"|"$/g, "").trim()
+                    : "";
+            });
+
+            bomData.push(obj);
+        }
+
+        console.log("BOM loaded correctly:", bomData);
+    });
 const svgObject = document.getElementById("schematicImage");
 
 svgObject.addEventListener("load", function () {
@@ -125,53 +159,53 @@ function getComponentImage(ref) {
 }
 
 
-    const texts = svgDoc.querySelectorAll("text");
+ // ================= COMPONENT CLICK (BOM DRIVEN) =================
+const infoBox = document.getElementById("infoBox");
 
-    texts.forEach(t => {
-        const label = t.textContent.trim();
+function isReference(text) {
+    return /^[A-Z]+\d+$/i.test(text);
+}
 
-        if (isReference(label)) {
-            t.style.cursor = "pointer";
-            t.style.fill = "#00bfff";
+svgDoc.querySelectorAll("text").forEach(t => {
 
-            t.addEventListener("click", () => {
+    const label = t.textContent.trim();
 
-    const group = t.closest("g");
-    const texts = group.querySelectorAll("text");
+    if (!isReference(label)) return;
 
-    let value = "Unknown";
-    let dnp = demoDNP.includes(label) ? "YES" : "No";
+    t.style.cursor = "pointer";
+    t.style.fill = "#00bfff";
 
+    t.addEventListener("click", () => {
 
-    texts.forEach(txt => {
-        const content = txt.textContent.trim();
+        const part = bomData.find(p => 
+    p.Ref && p.Ref.trim().toUpperCase() === label.trim().toUpperCase()
+);
 
-        if (content.toUpperCase() === "DNP") {
-            dnp = "YES";
+        if (!part) {
+            infoBox.innerHTML = `<h3>${label}</h3><p>No BOM data found</p>`;
+            return;
         }
 
-        // value = any text that is not reference and not DNP
-        if (!isReference(content) && content.toUpperCase() !== "DNP") {
-            value = content;
-        }
+        const value = part.Value || "Unknown";
+        const mpn = part.MPN || "-";
+        const desc = part.Description || "-";
+       const ds = part.Datasheet && part.Datasheet.trim() !== "" 
+           ? part.Datasheet.trim() 
+           : null;
+        const img = part.Image || null;
+        const dnp = part.DNP ? "YES" : "No";
+
+        infoBox.innerHTML = `
+            <h3>${label}</h3>
+            <p><b>Value:</b> ${value}</p>
+            <p><b>MPN:</b> ${mpn}</p>
+            <p><b>Description:</b> ${desc}</p>
+            <p><b>DNP:</b> ${dnp}</p>
+            ${ds ? `<a href="${ds}" target="_blank" class="dsBtn">📄 Open Datasheet</a>` : ""}
+            ${img ? `<img src="${img}" style="width:100%; margin-top:10px; border-radius:8px;">` : ""}
+        `;
     });
-
-    const img = getComponentImage(label);
-
-infoBox.innerHTML = `
-    <h3>${label}</h3>
-    <p><b>Value:</b> ${value}</p>
-    <p><b>DNP:</b> ${dnp}</p>
-    <img src="${img}" style="width:100%; margin-top:10px; border-radius:8px;">
-`;
-
-
-    console.log("Clicked:", label, "Value:", value, "DNP:", dnp);
-});
-
-        }
-    });
-
+}); 
     // 🔥 CRITICAL: refresh panzoom AFTER all SVG edits
     setTimeout(() => {
         panZoomInstance.resize();
