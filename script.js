@@ -128,17 +128,22 @@ svgObject.addEventListener("load", function () {
             const ds = part.Datasheet && part.Datasheet.trim()
                 ? part.Datasheet.trim()
                 : null;
-
-            infoBox.innerHTML = `
-                <h3>${label}</h3>
-                <p><b>Value:</b> ${part.Value}</p>
-                <p><b>MPN:</b> ${part.MPN}</p>
-                <p><b>Description:</b> ${part.Description}</p>
-                ${ds ? `<a href="${ds}" target="_blank" class="dsBtn">📄 Open Datasheet</a>` : ""}
-            `;
+let img = part.Image && part.Image.trim() !== ""
+    ? part.Image.trim()
+    : `data/images/${label}.jpg`;
+           infoBox.innerHTML = `
+    <h3>${label}</h3>
+    <p><b>Value:</b> ${part.Value}</p>
+    <p><b>MPN:</b> ${part.MPN}</p>
+    <p><b>Description:</b> ${part.Description}</p>
+    ${ds ? `<a href="${ds}" target="_blank" class="dsBtn">📄 Open Datasheet</a>` : ""}
+    <img src="${img}" 
+         onerror="this.style.display='none'" 
+         style="width:100%; margin-top:10px; border-radius:8px;">
+`;
 
             zoomToComponent(t.closest("g"));
         });
     });
 
-});
+});fcon
