@@ -24,7 +24,16 @@ svgObject.addEventListener("load", function () {
         minZoom: 0.5,
         maxZoom: 20
     });
+// =====================================
+// SEARCH ON ENTER KEY
+// =====================================
+const searchInput = document.getElementById("searchInput");
 
+searchInput.addEventListener("keydown", function(e){
+    if (e.key === "Enter") {
+        searchComponent();
+    }
+});
     console.log("PANZOOM READY");
 // ================= DEMO CLEANUP =================
 // Remove duplicate colored text (teal annotations)
