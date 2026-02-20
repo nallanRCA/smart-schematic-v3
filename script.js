@@ -58,6 +58,66 @@ svgObject.addEventListener("load", function () {
         minZoom: 0.5,
         maxZoom: 20
     });
+/// ================= ZOOM FUNCTION =================
+function zoomToComponent(target) {
+
+    if (!target || !panZoomInstance) return;
+
+    const bbox = target.getBBox();
+    const cx = bbox.x + bbox.width / 2;
+    const cy = bbox.y + bbox.height / 2;
+
+    const zoomLevel = 3;
+
+    panZoomInstance.zoom(zoomLevel);
+
+    panZoomInstance.pan({
+        x: -cx * zoomLevel + 400,
+        y: -cy * zoomLevel + 250
+    });
+}
+	
+	// ================= ZOOM TO COMPONENT =================
+function zoomToComponent(target) {
+
+    const bbox = target.getBBox();
+
+    const cx = bbox.x + bbox.width / 2;
+    const cy = bbox.y + bbox.height / 2;
+
+    // Set fixed zoom level
+    const zoomLevel = 3;
+
+    panZoomInstance.zoom(zoomLevel);
+
+    panZoomInstance.pan({
+        x: -cx * zoomLevel + 500,
+        y: -cy * zoomLevel + 300
+  // ================= SEARCH FUNCTION =================
+window.searchComponent = function () {
+
+    const input = document.getElementById("searchInput");
+    const ref = input.value.trim().toUpperCase();
+
+    if (!ref) return;
+
+    let target = null;
+
+    svgDoc.querySelectorAll("text").forEach(t => {
+        if (t.textContent.trim().toUpperCase() === ref) {
+            target = t.closest("g");
+        }
+    });
+
+    if (!target) {
+        alert("Component not found");
+        return;
+    }
+
+    zoomToComponent(target);
+};  
+	});
+}
 // =====================================
 // SEARCH ON ENTER KEY
 // =====================================
@@ -204,6 +264,7 @@ svgDoc.querySelectorAll("text").forEach(t => {
             ${ds ? `<a href="${ds}" target="_blank" class="dsBtn">📄 Open Datasheet</a>` : ""}
             ${img ? `<img src="${img}" style="width:100%; margin-top:10px; border-radius:8px;">` : ""}
         `;
+		zoomToComponent(t.closest("g"));
     });
 }); 
     // 🔥 CRITICAL: refresh panzoom AFTER all SVG edits
