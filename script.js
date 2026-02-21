@@ -2,7 +2,12 @@
 
 document.addEventListener("DOMContentLoaded", function () {
 
-
+// Ensure SVG has viewBox
+if (!svg.getAttribute("viewBox")) {
+    const bbox = svg.getBBox();
+    svg.setAttribute("viewBox",
+        `${bbox.x} ${bbox.y} ${bbox.width} ${bbox.height}`);
+}
 // ================================
 // SMART SCHEMATIC - CLEAN ENGINE
 // ================================
