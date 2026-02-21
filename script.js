@@ -60,7 +60,7 @@ svgObject.addEventListener("load", function () {
     });
 
     // 2️⃣ Auto-group components
-    autoGroupComponents(svgDoc);
+    //autoGroupComponents(svgDoc);
 
     // 3️⃣ Apply DNP state
     updateDNPVisibility(svgDoc);
