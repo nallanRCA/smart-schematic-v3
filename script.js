@@ -95,12 +95,19 @@ document.addEventListener("DOMContentLoaded", function () {
                     return;
                 }
 
-                infoBox.innerHTML = `
-                    <h3>${label}</h3>
-                    <p><b>Value:</b> ${part.Value}</p>
-                    <p><b>MPN:</b> ${part.MPN}</p>
-                    <p><b>Description:</b> ${part.Description}</p>
-                `;
+                const imgPath = part.Image && part.Image.trim() !== ""
+    ? part.Image.trim()
+    : `data/images/${label}.jpg`;
+
+infoBox.innerHTML = `
+    <h3>${label}</h3>
+    <p><b>Value:</b> ${part.Value}</p>
+    <p><b>MPN:</b> ${part.MPN}</p>
+    <p><b>Description:</b> ${part.Description}</p>
+    <img src="${imgPath}" 
+         alt="${label}" 
+         style="max-width:100%; margin-top:10px;">
+`;
             });
         });
 
