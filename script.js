@@ -1,3 +1,8 @@
+
+
+document.addEventListener("DOMContentLoaded", function () {
+
+
 // ================================
 // SMART SCHEMATIC - CLEAN ENGINE
 // ================================
@@ -146,7 +151,7 @@ document.getElementById("toggleDNP").addEventListener("click", function () {
     const svgDoc = svgObject.contentDocument;
     updateDNPVisibility(svgDoc);
 
-    
+    console.log("DNP toggled:", hideDNP);
 });
 
 // ================= COMPONENT CLICK =================
@@ -180,3 +185,4 @@ function enableComponentClick(svgDoc) {
         });
     });
 }
+});
