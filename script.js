@@ -1,11 +1,14 @@
 // ================================
-// SMART SCHEMATIC CLEAN ENGINE
+// SMART SCHEMATIC - CLEAN ENGINE
 // ================================
 
 let panZoomInstance = null;
-let svgDoc = null;
 let bomData = [];
+let hideDNP = false;
 
+const svgObject = document.getElementById("schematicImage");
+
+// ================= LOAD BOM =================
 fetch("data/bom.csv")
     .then(r => r.text())
     .then(csv => {
@@ -15,29 +18,33 @@ fetch("data/bom.csv")
 
         for (let i = 1; i < rows.length; i++) {
 
-            const values = rows[i].match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g);
-            if (!values) continue;
-
+            const values = rows[i].split(",");
             const obj = {};
-            headers.forEach((h, index) => {
-                obj[h.trim()] = values[index]
-                    ? values[index].replace(/^"|"$/g, "").trim()
+
+            headers.forEach((header, index) => {
+                obj[header.trim()] = values[index]
+                    ? values[index].trim()
                     : "";
             });
 
             bomData.push(obj);
         }
 
-        console.log("BOM loaded:", bomData.length);
+        console.log("BOM Ready:", bomData.length);
     });
 
-const svgObject = document.getElementById("schematicImage");
-
+// ================= SVG LOAD =================
 svgObject.addEventListener("load", function () {
 
-    svgDoc = svgObject.contentDocument;
+    const svgDoc = svgObject.contentDocument;
     const svg = svgDoc.querySelector("svg");
 
+    if (!svg) {
+        console.log("SVG not found");
+        return;
+    }
+
+    // 1️⃣ Initialize zoom
     panZoomInstance = svgPanZoom(svg, {
         zoomEnabled: true,
         controlIconsEnabled: false,
@@ -47,103 +54,129 @@ svgObject.addEventListener("load", function () {
         maxZoom: 20
     });
 
-    // ================= ZOOM FUNCTION =================
-    function zoomToComponent(target) {
+    // 2️⃣ Auto-group components
+    autoGroupComponents(svgDoc);
 
-        if (!target) return;
+    // 3️⃣ Apply DNP state
+    updateDNPVisibility(svgDoc);
 
-        const bbox = target.getBBox();
-        const cx = bbox.x + bbox.width / 2;
-        const cy = bbox.y + bbox.height / 2;
+    // 4️⃣ Enable component click
+    enableComponentClick(svgDoc);
 
-        panZoomInstance.zoomAtPointBy(3, { x: cx, y: cy });
-    }
+    console.log("Viewer Ready");
+});
 
-    // ================= SEARCH =================
-    window.searchComponent = function () {
+// ================= AUTO GROUP =================
+function autoGroupComponents(svgDoc) {
 
-        const input = document.getElementById("searchInput");
-        const ref = input.value.trim().toUpperCase();
-        if (!ref) return;
+    const texts = svgDoc.querySelectorAll("text");
 
-        let target = null;
+    texts.forEach(t => {
 
-        svgDoc.querySelectorAll("text").forEach(t => {
-            if (t.textContent.trim().toUpperCase() === ref)
-                target = t.closest("g");
+        const ref = t.textContent.trim();
+        if (!/^[A-Z]+\d+$/i.test(ref)) return;
+
+        const bbox = t.getBBox();
+        const padding = 40;
+
+        const minX = bbox.x - padding;
+        const minY = bbox.y - padding;
+        const maxX = bbox.x + bbox.width + padding;
+        const maxY = bbox.y + bbox.height + padding;
+
+        const newGroup = svgDoc.createElementNS("http://www.w3.org/2000/svg", "g");
+        newGroup.setAttribute("id", ref);
+
+        const elements = svgDoc.querySelectorAll("path, line, rect, circle, polyline, polygon");
+
+        elements.forEach(el => {
+
+            const elBox = el.getBBox();
+            const centerX = elBox.x + elBox.width / 2;
+            const centerY = elBox.y + elBox.height / 2;
+
+            if (
+                centerX >= minX &&
+                centerX <= maxX &&
+                centerY >= minY &&
+                centerY <= maxY
+            ) {
+                newGroup.appendChild(el);
+            }
         });
 
-        if (!target) {
-            alert("Component not found");
-            return;
+        newGroup.appendChild(t);
+        svgDoc.querySelector("svg").appendChild(newGroup);
+
+    });
+
+    console.log("Auto grouping complete");
+}
+
+// ================= DNP =================
+function updateDNPVisibility(svgDoc) {
+
+    console.log("Running DNP update");
+
+    bomData.forEach(part => {
+
+        console.log(part.Ref, part.DNP);
+
+        const ref = part.Ref?.trim();
+        const isDNP = ["YES","TRUE","1"].includes(
+            part.DNP?.trim().toUpperCase()
+        );
+
+        console.log("Is DNP?", ref, isDNP);
+
+        const element = svgDoc.getElementById(ref);
+
+        if (element && isDNP) {
+            element.style.display = hideDNP ? "none" : "inline";
+            console.log("Toggled:", ref);
         }
+    });
+}
 
-        zoomToComponent(target);
-    };
+// ================= TOGGLE =================
+document.getElementById("toggleDNP").addEventListener("click", function () {
 
-    // ================= SEARCH ENTER =================
-    document.getElementById("searchInput")
-        .addEventListener("keydown", function (e) {
-            if (e.key === "Enter") searchComponent();
-        });
+    hideDNP = !hideDNP;
 
-    // ================= ZOOM BUTTONS =================
-    document.getElementById("zoomIn").onclick = () => panZoomInstance.zoomIn();
-    document.getElementById("zoomOut").onclick = () => panZoomInstance.zoomOut();
-    document.getElementById("zoomReset").onclick = () => {
-        panZoomInstance.resetZoom();
-        panZoomInstance.center();
-    };
-    document.getElementById("fitScreen").onclick = () => {
-        panZoomInstance.fit();
-        panZoomInstance.center();
-    };
+    const svgDoc = svgObject.contentDocument;
+    updateDNPVisibility(svgDoc);
 
-    // ================= CLICK HANDLER =================
+    
+});
+
+// ================= COMPONENT CLICK =================
+function enableComponentClick(svgDoc) {
+
     const infoBox = document.getElementById("infoBox");
 
-    function isReference(text) {
-        return /^[A-Z]+\d+$/i.test(text);
-    }
+    svgDoc.querySelectorAll("g[id]").forEach(group => {
 
-    svgDoc.querySelectorAll("text").forEach(t => {
+        const ref = group.getAttribute("id");
 
-        const label = t.textContent.trim();
-        if (!isReference(label)) return;
+        group.style.cursor = "pointer";
 
-        t.style.cursor = "pointer";
-        t.style.fill = "#00bfff";
-
-        t.addEventListener("click", () => {
+        group.addEventListener("click", () => {
 
             const part = bomData.find(p =>
-                p.Ref && p.Ref.trim().toUpperCase() === label
+                p.Ref && p.Ref.trim().toUpperCase() === ref.toUpperCase()
             );
 
             if (!part) {
-                infoBox.innerHTML = `<h3>${label}</h3><p>No BOM data</p>`;
+                infoBox.innerHTML = `<h3>${ref}</h3><p>No BOM Data</p>`;
                 return;
             }
 
-            const ds = part.Datasheet && part.Datasheet.trim()
-                ? part.Datasheet.trim()
-                : null;
-let img = part.Image && part.Image.trim() !== ""
-    ? part.Image.trim()
-    : `data/images/${label}.jpg`;
-           infoBox.innerHTML = `
-    <h3>${label}</h3>
-    <p><b>Value:</b> ${part.Value}</p>
-    <p><b>MPN:</b> ${part.MPN}</p>
-    <p><b>Description:</b> ${part.Description}</p>
-    ${ds ? `<a href="${ds}" target="_blank" class="dsBtn">📄 Open Datasheet</a>` : ""}
-    <img src="${img}" 
-         onerror="this.style.display='none'" 
-         style="width:100%; margin-top:10px; border-radius:8px;">
-`;
-
-            zoomToComponent(t.closest("g"));
+            infoBox.innerHTML = `
+                <h3>${ref}</h3>
+                <p><b>Value:</b> ${part.Value}</p>
+                <p><b>MPN:</b> ${part.MPN}</p>
+                <p><b>Description:</b> ${part.Description}</p>
+            `;
         });
     });
-
-});fcon
+}
