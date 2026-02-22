@@ -99,14 +99,22 @@ document.addEventListener("DOMContentLoaded", function () {
     ? part.Image.trim()
     : `data/images/${label}.jpg`;
 
+let imgHTML = "";
+
+if (part.Image && part.Image.trim() !== "") {
+    imgHTML = `
+        <img src="${part.Image.trim()}"
+             alt="${label}"
+             style="max-width:100%; margin-top:10px;">
+    `;
+}
+
 infoBox.innerHTML = `
     <h3>${label}</h3>
     <p><b>Value:</b> ${part.Value}</p>
     <p><b>MPN:</b> ${part.MPN}</p>
     <p><b>Description:</b> ${part.Description}</p>
-    <img src="${imgPath}" 
-         alt="${label}" 
-         style="max-width:100%; margin-top:10px;">
+    ${imgHTML}
 `;
             });
         });
