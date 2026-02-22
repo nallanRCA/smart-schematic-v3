@@ -100,6 +100,7 @@ document.addEventListener("DOMContentLoaded", function () {
     : `data/images/${label}.jpg`;
 
 let imgHTML = "";
+let dsHTML = "";
 
 if (part.Image && part.Image.trim() !== "") {
     imgHTML = `
@@ -109,11 +110,30 @@ if (part.Image && part.Image.trim() !== "") {
     `;
 }
 
+if (part.Datasheet && part.Datasheet.trim() !== "") {
+    dsHTML = `
+        <p>
+            <a href="${part.Datasheet.trim()}"
+               target="_blank"
+               style="display:inline-block;
+                      margin-top:8px;
+                      padding:6px 10px;
+                      background:#007acc;
+                      color:white;
+                      text-decoration:none;
+                      border-radius:4px;">
+               📄 Open Datasheet
+            </a>
+        </p>
+    `;
+}
+
 infoBox.innerHTML = `
     <h3>${label}</h3>
     <p><b>Value:</b> ${part.Value}</p>
     <p><b>MPN:</b> ${part.MPN}</p>
     <p><b>Description:</b> ${part.Description}</p>
+    ${dsHTML}
     ${imgHTML}
 `;
             });
