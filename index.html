@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Smart Schematic V3</title>
+
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div id="app">
+
+    <!-- LEFT PANEL -->
+    <div id="leftPanel">
+
+    <h2>Smart Schematic</h2>
+<div class="panelSection">
+    <h3>Search Component</h3>
+    <input id="searchInput" placeholder="Ex: R12, C5, U1">
+    <button onclick="searchComponent()">Search</button>
+</div>
+
+    <div class="panelSection">
+        <h3>Assembly</h3>
+       <button id="toggleDNP">Show / Hide DNP</button>
+    </div>
+
+    <div class="panelSection">
+        <h3>Zoom</h3>
+        <button id="zoomIn">Zoom In</button>
+        <button id="zoomOut">Zoom Out</button>
+        <button id="zoomReset">Reset View</button>
+    </div>
+
+    <div class="panelSection">
+        <h3>View</h3>
+        <button id="fitScreen">Fit to Screen</button>
+    </div>
+
+</div>
+
+
+    <!-- CENTER PANEL -->
+    <div id="viewer">
+        <div id="schematicContainer">
+            <object id="schematicImage"
+                    type="image/svg+xml"
+                    data="schematic.svg">
+            </object>
+        </div>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div id="rightPanel">
+        <h2>Component Info</h2>
+        <div id="infoBox">
+            Select a component in the schematic
+
+        </div>
+    </div>
+
+</div>
+
+<script src="svg-pan-zoom.min.js"></script>
+<script src="script.js?v=10"></script>
+
+</body>
+</html>
